@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Running {{ experiment_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="experiment-running">
+    <div class="running-container">
+        <h1>{{ experiment_name }} is now running!</h1>
+        <p>Good luck with the experiment!</p>
+        <a href="/" class="return-home">← Return Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Experiment Launcher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="top-nav">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+
+<div class="sidebar">
+    <h2>Experiment Types</h2>
+    <ul>
+        {% for category in categories %}
+        <li><a href="#{{ category | replace(' ', '') }}">{{ category }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="main">
+    <div class="header-section">
+        <h1>Welcome to the Experiment Launcher</h1>
+        <p class="subtitle">Explore cognitive and behavioral science experiments built for academic research and internal studies.</p>
+        <a class="learn-button" href="{{ url_for('learn_more') }}">Learn More</a>
+    </div>
+
+    {% for category in categories %}
+        <h2 id="{{ category | replace(' ', '') }}">{{ category }}</h2>
+        <div class="experiment-grid">
+            {% for experiment in experiments if experiment.category == category %}
+            <div class="experiment-card">
+                <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">{{ experiment.name }}</a>
+                <p class="description">{{ experiment.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
