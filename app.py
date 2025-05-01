@@ -12,6 +12,7 @@ experiments = [
     {'name': 'Memory Recall', 'description': 'Short-term memory accuracy test.', 'category': 'Memory'},
     {'name': 'Working Memory', 'description': 'Span and recall capacity test.', 'category': 'Memory'},
     {'name': 'Long-Term Memory', 'description': 'Delayed recall after distraction.', 'category': 'Memory'},
+    {'name': 'Consonant Trigram Task (Peterson & Peterson, 1959)', 'description': 'Recall the trigram from memory', 'category': 'Memory'},
     {'name': 'Emotional Stroop', 'description': 'Emotion-word interference task.', 'category': 'Cognitive Control'},
     {'name': 'Task Switching', 'description': 'Shift attention between tasks.', 'category': 'Cognitive Control'},
     {'name': 'Executive Conflict', 'description': 'Manage conflicting cognitive demands.', 'category': 'Cognitive Control'},
@@ -40,6 +41,11 @@ def run_experiment(experiment_name):
         # Launch the PsychoPy experiment!
         subprocess.Popen([PSYCHOPY_PYTHON_PATH, SART_SCRIPT_PATH])
         return render_template('experiment_running.html', experiment_name=experiment_name)
+    elif experiment_name == 'Consonant Trigram Task (Peterson & Peterson, 1959)':
+        # Launch the PsychoPy experiment!
+        script_path = os.path.join("TRIGRAM", "TRIGRAM_EXP.py")
+        subprocess.Popen([PSYCHOPY_PYTHON_PATH, script_path])
+        return render_template('experiment_running.html', experiment_name=experiment_name)
     else:
         return f"<h1>Experiment '{experiment_name}' is not ready yet. 🚧</h1><br><a href='/'>Return Home</a>"
 
@@ -52,4 +58,7 @@ def contact():
     return render_template('contact.html')
 
 if __name__ == '__main__':
+    x = input("are you the amazing Huize: (y/n)")
+    if x.lower() == 'y':
+        PSYCHOPY_PYTHON_PATH = r"C:\Users\Huize\AppData\Local\Programs\PsychoPy\python.exe"
     app.run(debug=True)

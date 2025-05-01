@@ -1,0 +1,7 @@
+participant,trial,trigram,response,correct
+hmao_1,1,GXL,GXK,False
+hmao_1,2,FCG,FCG,True
+hmao_1,3,SBR,SBR,True
+hmao_1,4,LHS,LHS,True
+hmao_1,5,XDH,XDH,True
+hmao_1,6,KZX,KZX,True
