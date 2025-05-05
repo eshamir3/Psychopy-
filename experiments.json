@@ -82,7 +82,7 @@
             "name": "Value Choice",
             "description": "Choose between rewards.",
             "category": "Decision Making",
-            "path": null
+            "path": "experiments/VALUECHOICE_EXP.py"
         },
         {
             "name": "Strategy Shift",
