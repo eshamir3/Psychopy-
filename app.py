@@ -1,35 +1,28 @@
 from flask import Flask, render_template, redirect, url_for
 import subprocess
 import os
+import json
 
 app = Flask(__name__)
 
-# Define experiments
-experiments = [
-    {'name': 'SART Task', 'description': 'Measure sustained attention and inhibition.', 'category': 'Attention'},
-    {'name': 'Rapid Attention', 'description': 'Test quick attention switching.', 'category': 'Attention'},
-    {'name': 'Focused Blink', 'description': 'Visual focus reaction time.', 'category': 'Attention'},
-    {'name': 'Memory Recall', 'description': 'Short-term memory accuracy test.', 'category': 'Memory'},
-    {'name': 'Working Memory', 'description': 'Span and recall capacity test.', 'category': 'Memory'},
-    {'name': 'Long-Term Memory', 'description': 'Delayed recall after distraction.', 'category': 'Memory'},
-    {'name': 'Consonant Trigram Task (Peterson & Peterson, 1959)', 'description': 'Recall the trigram from memory', 'category': 'Memory'},
-    {'name': 'Emotional Stroop', 'description': 'Emotion-word interference task.', 'category': 'Cognitive Control'},
-    {'name': 'Task Switching', 'description': 'Shift attention between tasks.', 'category': 'Cognitive Control'},
-    {'name': 'Executive Conflict', 'description': 'Manage conflicting cognitive demands.', 'category': 'Cognitive Control'},
-    {'name': 'Reaction Speed', 'description': 'Measure simple reaction time.', 'category': 'Processing Speed'},
-    {'name': 'Visual Search', 'description': 'Find targets among distractors.', 'category': 'Processing Speed'},
-    {'name': 'Motor Response', 'description': 'Record motor reaction times.', 'category': 'Processing Speed'},
-    {'name': 'Decision Risk', 'description': 'Make decisions under uncertainty.', 'category': 'Decision Making'},
-    {'name': 'Value Choice', 'description': 'Choose between rewards.', 'category': 'Decision Making'},
-    {'name': 'Strategy Shift', 'description': 'Adapt to changing environments.', 'category': 'Decision Making'},
-]
+# Load experiments from JSON file
+def load_experiments():
+    try:
+        with open('experiments.json', 'r') as f:
+            data = json.load(f)
+            return data['experiments']
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading experiments: {e}")
+        return []
 
-# Categories
-categories = ["Attention", "Memory", "Cognitive Control", "Processing Speed", "Decision Making"]
+# Load experiments
+experiments = load_experiments()
+
+# Categories (extracted from experiments)
+categories = list(set(exp['category'] for exp in experiments))
 
 # Adjust your path to PsychoPy python if needed
 PSYCHOPY_PYTHON_PATH = r"C:\Program Files\PsychoPy\python.exe"
-SART_SCRIPT_PATH = os.path.join("SART", "SART_EXP.py")
 
 @app.route('/')
 def index():
@@ -37,17 +30,25 @@ def index():
 
 @app.route('/run/<experiment_name>')
 def run_experiment(experiment_name):
-    if experiment_name == "SART Task":
-        # Launch the PsychoPy experiment!
-        subprocess.Popen([PSYCHOPY_PYTHON_PATH, SART_SCRIPT_PATH])
-        return render_template('experiment_running.html', experiment_name=experiment_name)
-    elif experiment_name == 'Consonant Trigram Task (Peterson & Peterson, 1959)':
-        # Launch the PsychoPy experiment!
-        script_path = os.path.join("TRIGRAM", "TRIGRAM_EXP.py")
-        subprocess.Popen([PSYCHOPY_PYTHON_PATH, script_path])
-        return render_template('experiment_running.html', experiment_name=experiment_name)
-    else:
+    # Find the experiment in our list
+    experiment = next((exp for exp in experiments if exp['name'] == experiment_name), None)
+    
+    if not experiment:
+        return f"<h1>Experiment '{experiment_name}' not found. 🚧</h1><br><a href='/'>Return Home</a>"
+    
+    if not experiment['path']:
         return f"<h1>Experiment '{experiment_name}' is not ready yet. 🚧</h1><br><a href='/'>Return Home</a>"
+    
+    # Check if the path exists
+    if not os.path.exists(experiment['path']):
+        return f"<h1>Error: Experiment file not found at {experiment['path']} 🚧</h1><br><a href='/'>Return Home</a>"
+    
+    try:
+        # Launch the PsychoPy experiment
+        subprocess.Popen([PSYCHOPY_PYTHON_PATH, experiment['path']])
+        return render_template('experiment_running.html', experiment_name=experiment_name)
+    except Exception as e:
+        return f"<h1>Error launching experiment: {str(e)} 🚧</h1><br><a href='/'>Return Home</a>"
 
 @app.route('/learn_more')
 def learn_more():

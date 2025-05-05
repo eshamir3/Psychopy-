@@ -4,6 +4,7 @@
 
 from psychopy import visual, core, event, gui
 import random, string, csv
+import os
 
 # ============ GET PARTICIPANT ID ============
 dlg = gui.Dlg(title="Participant Info")
@@ -147,15 +148,29 @@ for t in range(1, main_trials + 1):
     tri, resp, corr = run_trial(is_practice=False)
     results.append((participant_id, t, tri, resp, corr))
 
-# ==== SAVE DATA TO "{participant_id}.csv" ====
-filename = f"{participant_id}.csv"
-with open(filename, 'w', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(['participant','trial','trigram','response','correct'])
-    writer.writerows(results)
-
-# End screen
-show_text("You have completed the task.\n\nThank you for participating!\n\nPress any key to exit.")
+# ==== SAVE DATA ====
+try:
+    # Get the absolute path to the data directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    data_dir = os.path.join(parent_dir, 'data')
+    
+    # Create data directory if it doesn't exist
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    
+    # Save the data
+    filename = os.path.join(data_dir, f"TRIGRAM_{participant_id}.csv")
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['participant','trial','trigram','response','correct'])
+        writer.writerows(results)
+    
+    # Show success message
+    show_text(f"Data saved successfully to:\n{filename}\n\nPress any key to exit.")
+except Exception as e:
+    # Show error message if saving fails
+    show_text(f"Error saving data: {str(e)}\n\nPress any key to exit.")
 
 win.close()
 core.quit()

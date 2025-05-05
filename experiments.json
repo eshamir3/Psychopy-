@@ -1,0 +1,94 @@
+{
+    "experiments": [
+        {
+            "name": "SART Task",
+            "description": "Measure sustained attention and inhibition.",
+            "category": "Attention",
+            "path": "experiments/SART_EXP.py"
+        },
+        {
+            "name": "Rapid Attention",
+            "description": "Test quick attention switching.",
+            "category": "Attention",
+            "path": null
+        },
+        {
+            "name": "Focused Blink",
+            "description": "Visual focus reaction time.",
+            "category": "Attention",
+            "path": null
+        },
+        {
+            "name": "Consonant Trigram Task (Peterson & Peterson, 1959)",
+            "description": "Recall the trigram from memory",
+            "category": "Memory",
+            "path": "experiments/TRIGRAM_EXP.py"
+        },
+        {
+            "name": "Cued Recall Task",
+            "description": "Tolan & Tehan (1999) variant of cued recall procedure",
+            "category": "Memory",
+            "path": "experiments/CUEDRECALL_EXP.py"
+        },
+        {
+            "name": "IMT_DMT Task",
+            "description": "Immediate & Delayed Memory Task (Dougherty et al., 2002)",
+            "category": "Memory",
+            "path": "experiments/IMTDMT_EXP.py"
+        },
+        {
+            "name": "Emotional Stroop",
+            "description": "Emotion-word interference task.",
+            "category": "Cognitive Control",
+            "path": null
+        },
+        {
+            "name": "Task Switching",
+            "description": "Shift attention between tasks.",
+            "category": "Cognitive Control",
+            "path": null
+        },
+        {
+            "name": "Executive Conflict",
+            "description": "Manage conflicting cognitive demands.",
+            "category": "Cognitive Control",
+            "path": null
+        },
+        {
+            "name": "Reaction Speed",
+            "description": "Measure simple reaction time.",
+            "category": "Processing Speed",
+            "path": null
+        },
+        {
+            "name": "Visual Search",
+            "description": "Find targets among distractors.",
+            "category": "Processing Speed",
+            "path": null
+        },
+        {
+            "name": "Motor Response",
+            "description": "Record motor reaction times.",
+            "category": "Processing Speed",
+            "path": null
+        },
+        {
+            "name": "Decision Risk",
+            "description": "Make decisions under uncertainty.",
+            "category": "Decision Making",
+            "path": null
+        },
+        {
+            "name": "Value Choice",
+            "description": "Choose between rewards.",
+            "category": "Decision Making",
+            "path": null
+        },
+        {
+            "name": "Strategy Shift",
+            "description": "Adapt to changing environments.",
+            "category": "Decision Making",
+            "path": null
+        }
+    ]
+} 
