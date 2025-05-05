@@ -1,0 +1,6 @@
+﻿thisRow.t,notes,trial_type,category,recall_response,trial_num,target,foil,correct,recall_rt,
+,,demo1,furniture,stool,,,,,,
+,,demo2,furniture,,,,,,,
+,,block1,furniture,,1,chair,couch,0,5036,
+,,block2_target,fruit,sl,2,banana,apple,0,1363,
+,,block1,bird,s,3,penguin,robin,0,544,
