@@ -20,7 +20,8 @@ def load_experiments():
 
 # Load and categorize experiments
 experiments = load_experiments()
-categories = sorted(set(exp['category'] for exp in experiments))
+raw_categories = list(set(exp['category'] for exp in experiments))
+categories = sorted(raw_categories, key=lambda x: (x != "Memory", x))  # Prioritize 'Memory' on top
 
 @app.route('/')
 def index():
@@ -29,9 +30,9 @@ def index():
 @app.route('/run/<experiment_name>')
 def run_experiment(experiment_name):
     experiment = next(
-    (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
-    None
-)
+        (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
+        None
+    )
 
     if not experiment:
         return f"<h1>Experiment '{experiment_name}' not found. 🚧</h1><br><a href='/'>Return Home</a>"
