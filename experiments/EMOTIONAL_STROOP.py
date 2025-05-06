@@ -16,6 +16,17 @@ categories = {
 }
 practice_words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
 
+# === PARTICIPANT INFO ===
+dlg = gui.Dlg(title="Participant Info")
+dlg.addField("Participant ID:")
+dlg.addField("Session Number:")
+ok_data = dlg.show()
+if not dlg.OK:
+    core.quit()
+
+participant_id = ok_data[0]
+session_number = ok_data[1]
+
 # === SETUP ===
 win = visual.Window(size=(800, 600), color='black', units='pix')
 fixation = visual.TextStim(win, text='+', color='white')
@@ -65,9 +76,15 @@ def run_trial(word, color, category, is_practice=False):
 
     if not is_practice:
         results.append({
-            'word': word, 'color': color, 'category': category,
-            'response_key': key, 'response_color': response_color if key else None,
-            'correct': int(correct), 'rt': round(rt * 1000) if rt else None
+            'participant_id': participant_id,
+            'session_number': session_number,
+            'word': word,
+            'color': color,
+            'category': category,
+            'response_key': key,
+            'response_color': response_color if key else None,
+            'correct': int(correct),
+            'rt': round(rt * 1000) if rt else None
         })
 
 # === BLOCKS ===
@@ -82,16 +99,15 @@ def run_main():
     for category, words in categories.items():
         selected_words = random.sample(words, 5)
         for word in selected_words:
-            for _ in range(1):  # 1 trial per word
-                color = random.choice(colors)
-                all_trials.append((word, color, category))
+            color = random.choice(colors)
+            all_trials.append((word, color, category))
     random.shuffle(all_trials)
     for word, color, category in all_trials:
         run_trial(word, color, category)
 
 # === SAVE DATA ===
 def save_data():
-    filename = f"stroop_results_{data.getDateStr()}.csv"
+    filename = f"stroop_results_{participant_id}_s{session_number}_{data.getDateStr()}.csv"
     with open(filename, mode='w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=results[0].keys())
         writer.writeheader()
