@@ -28,7 +28,10 @@ def index():
 
 @app.route('/run/<experiment_name>')
 def run_experiment(experiment_name):
-    experiment = next((exp for exp in experiments if exp['name'] == experiment_name), None)
+    experiment = next(
+    (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
+    None
+)
 
     if not experiment:
         return f"<h1>Experiment '{experiment_name}' not found. 🚧</h1><br><a href='/'>Return Home</a>"
