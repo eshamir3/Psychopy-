@@ -2,9 +2,7 @@ from psychopy import visual, event, core, gui, data
 import random
 import csv
 
-# === CONFIGURATION ===
-fixation_time = 0.5  # seconds
-stim_time = 2  # seconds max per trial
+# === FIXED CONFIG ===
 keys = {'red': 'd', 'green': 'f', 'blue': 'j', 'yellow': 'k'}
 colors = ['red', 'green', 'blue', 'yellow']
 categories = {
@@ -16,18 +14,37 @@ categories = {
 }
 practice_words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
 
-# === PARTICIPANT INFO ===
-dlg = gui.Dlg(title="Participant Info")
+# === GUI CONFIGURATION ===
+dlg = gui.Dlg(title="Stroop Task Settings")
 dlg.addField("Participant ID:")
 dlg.addField("Session Number:")
+dlg.addField("Stimulus Duration (sec):", 2.0)
+dlg.addField("Fixation Duration (sec):", 0.5)
+dlg.addText("Select Categories:")
+include_neutral = dlg.addField("Neutral", True)
+include_aggression = dlg.addField("Aggression", True)
+include_positive = dlg.addField("Positive", True)
+include_negative = dlg.addField("Negative", True)
+include_color = dlg.addField("Color (Control)", False)
+
 ok_data = dlg.show()
 if not dlg.OK:
     core.quit()
 
+# === EXTRACT CONFIGURATION ===
 participant_id = ok_data[0]
 session_number = ok_data[1]
+stim_time = float(ok_data[2])
+fixation_time = float(ok_data[3])
 
-# === SETUP ===
+selected_categories = {}
+if ok_data[4]: selected_categories['neutral'] = categories['neutral']
+if ok_data[5]: selected_categories['aggression'] = categories['aggression']
+if ok_data[6]: selected_categories['positive'] = categories['positive']
+if ok_data[7]: selected_categories['negative'] = categories['negative']
+if ok_data[8]: selected_categories['color'] = categories['color']
+
+# === SETUP WINDOW AND STIMULI ===
 win = visual.Window(size=(800, 600), color='black', units='pix')
 fixation = visual.TextStim(win, text='+', color='white')
 stimulus = visual.TextStim(win, text='', color='white', height=50)
@@ -87,16 +104,17 @@ def run_trial(word, color, category, is_practice=False):
             'rt': round(rt * 1000) if rt else None
         })
 
-# === BLOCKS ===
+# === PRACTICE ===
 def run_practice():
     random.shuffle(practice_words)
     for word in practice_words:
         color = random.choice(colors)
         run_trial(word, color, 'practice', is_practice=True)
 
+# === MAIN EXPERIMENT ===
 def run_main():
     all_trials = []
-    for category, words in categories.items():
+    for category, words in selected_categories.items():
         selected_words = random.sample(words, 5)
         for word in selected_words:
             color = random.choice(colors)
@@ -106,15 +124,18 @@ def run_main():
         run_trial(word, color, category)
 
 # === SAVE DATA ===
-def save_data():
+def save_data(duration):
     filename = f"stroop_results_{participant_id}_s{session_number}_{data.getDateStr()}.csv"
     with open(filename, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=results[0].keys())
+        fieldnames = list(results[0].keys()) + ['experiment_duration']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(results)
+        for row in results:
+            row['experiment_duration'] = duration
+            writer.writerow(row)
     print(f"Data saved to {filename}")
 
-# === RUN ===
+# === RUN FULL TASK ===
 show_instructions()
 run_practice()
 
@@ -123,10 +144,14 @@ instruction.draw()
 win.flip()
 event.waitKeys()
 
+start_time = core.getTime()
 run_main()
-save_data()
+end_time = core.getTime()
+duration = round(end_time - start_time, 2)
 
-instruction.text = "Thank you! The task is complete.\nYou may now exit the experiment."
+save_data(duration)
+
+instruction.text = f"Thank you! The task is complete.\nDuration: {duration} seconds.\nYou may now exit the experiment."
 instruction.draw()
 win.flip()
 event.waitKeys()
