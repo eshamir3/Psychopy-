@@ -46,6 +46,7 @@ instruction_text = visual.TextStim(win, text='', color='black', wrapWidth=800)
 stimulus_text = visual.TextStim(win, text='', color='black', height=0.2)
 feedback_text = visual.TextStim(win, text='', color='green', wrapWidth=800)
 fixation = visual.TextStim(win, text='+', color='black', height=0.1)
+continue_text = visual.TextStim(win, text='Press SPACE to continue', color='black', pos=(0, -300))
 
 # --- 4. Define trial types ---
 # Shapes and their corresponding keys
@@ -67,13 +68,14 @@ if expInfo['Show Instructions']:
         "  ● = 2\n"
         "  ■ = 3\n"
         "  ▲ = 4\n\n"
-        "Ready to try? Press any key to start practice!"
+        "Ready to try? Press SPACE to start practice!"
     )
 
     instruction_text.text = instructions
     instruction_text.draw()
+    continue_text.draw()
     win.flip()
-    event.waitKeys()
+    event.waitKeys(keyList=['space'])
 
 # --- 6. Practice Trials ---
 if expInfo['Practice Trials']:
@@ -112,8 +114,9 @@ if expInfo['Practice Trials']:
             feedback_text.text = "Too slow! Try to respond faster."
         
         feedback_text.draw()
+        continue_text.draw()
         win.flip()
-        core.wait(0.75)
+        event.waitKeys(keyList=['space'])
 
 # --- 7. Start Main Experiment Instructions ---
 instruction_text.text = (
@@ -123,12 +126,12 @@ instruction_text.text = (
     "• Press 3 for ■\n"
     "• Press 4 for ▲\n"
     "• Try to be quick but accurate\n"
-    "• Take a deep breath and focus\n\n"
-    "Ready? Press any key to begin!"
+    "• Take a deep breath and focus"
 )
 instruction_text.draw()
+continue_text.draw()
 win.flip()
-event.waitKeys()
+event.waitKeys(keyList=['space'])
 
 # --- 8. Main Trials ---
 main_shapes = list(shapes.keys()) * (expInfo['Number of Main Trials'] // 4)
@@ -170,8 +173,9 @@ instruction_text.text = (
     "You may now close the window."
 )
 instruction_text.draw()
+continue_text.draw()
 win.flip()
-core.wait(3.0)
+event.waitKeys(keyList=['space'])
 
 # --- 10. Save and Exit ---
 try:
@@ -179,12 +183,14 @@ try:
     # Show success message
     instruction_text.text = f"Data saved successfully to:\n{filename}.csv\n\nYou may now close the window."
     instruction_text.draw()
+    continue_text.draw()
     win.flip()
-    core.wait(3.0)
+    event.waitKeys(keyList=['space'])
 except Exception as e:
     # Show error message if saving fails
     instruction_text.text = f"Error saving data: {str(e)}\n\nPress any key to exit."
     instruction_text.draw()
+    continue_text.draw()
     win.flip()
     event.waitKeys()
 

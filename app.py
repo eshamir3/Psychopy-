@@ -65,7 +65,7 @@ def contact():
     return render_template('contact.html')
 
 if __name__ == '__main__':
-    x = input("Are you the amazing Huize? (y/n): ")
+    x = input("Are you the H? (y/n): ")
     if x.lower() == 'y':
         PSYCHOPY_PYTHON_PATH = r"C:\Users\Huize\AppData\Local\Programs\PsychoPy\python.exe"
     app.run(debug=True)

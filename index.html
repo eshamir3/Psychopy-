@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychology Experiments</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .experiment-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .experiment-title {
+            color: #3498db;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .experiment-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .button.secondary {
+            background-color: #2ecc71;
+        }
+        .button.secondary:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Psychology Experiments</h1>
+
+        <!-- Emotional Stroop Task -->
+        <div class="experiment-card">
+            <h2 class="experiment-title">Emotional Stroop Task</h2>
+            <p class="experiment-description">Measure attention and emotional processing by identifying the color of emotionally charged words.</p>
+            <div class="button-group">
+                <a href="experiments/EMOTIONAL_STROOP.py" class="button">Run Experiment</a>
+                <a href="user_manuals.html#stroop" class="button secondary">View Manual</a>
+            </div>
+        </div>
+
+        <!-- Flanker Task -->
+        <div class="experiment-card">
+            <h2 class="experiment-title">Flanker Task</h2>
+            <p class="experiment-description">Measure attention and response inhibition by responding to central arrows while ignoring flanking arrows.</p>
+            <div class="button-group">
+                <a href="experiments/FLANKER_EXP.py" class="button">Run Experiment</a>
+                <a href="user_manuals.html#flanker" class="button secondary">View Manual</a>
+            </div>
+        </div>
+
+        <!-- Go/No-Go Task -->
+        <div class="experiment-card">
+            <h2 class="experiment-title">Go/No-Go Task</h2>
+            <p class="experiment-description">Measure response inhibition by responding to certain letters and withholding responses to others.</p>
+            <div class="button-group">
+                <a href="experiments/GONOGO_EXP.py" class="button">Run Experiment</a>
+                <a href="user_manuals.html#gonogo" class="button secondary">View Manual</a>
+            </div>
+        </div>
+
+        <!-- N-Back Task -->
+        <div class="experiment-card">
+            <h2 class="experiment-title">N-Back Task</h2>
+            <p class="experiment-description">Measure working memory by identifying when a current stimulus matches one from N items back.</p>
+            <div class="button-group">
+                <a href="experiments/NBACK_EXP.py" class="button">Run Experiment</a>
+                <a href="user_manuals.html#nback" class="button secondary">View Manual</a>
+            </div>
+        </div>
+
+        <!-- Choice Reaction Time Task -->
+        <div class="experiment-card">
+            <h2 class="experiment-title">Choice Reaction Time Task</h2>
+            <p class="experiment-description">Measure basic processing speed and decision making by responding to different shapes with corresponding number keys.</p>
+            <div class="button-group">
+                <a href="experiments/CHOICERT_EXP.py" class="button">Run Experiment</a>
+                <a href="user_manuals.html#choicert" class="button secondary">View Manual</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

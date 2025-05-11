@@ -1,6 +1,7 @@
 from psychopy import visual, event, core, gui, data
 import random
 import csv
+import os
 
 # === FIXED CONFIG ===
 keys = {'red': 'd', 'green': 'f', 'blue': 'j', 'yellow': 'k'}
@@ -15,40 +16,46 @@ categories = {
 practice_words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
 
 # === GUI CONFIGURATION ===
-dlg = gui.Dlg(title="Stroop Task Settings")
-dlg.addField("Participant ID:")
-dlg.addField("Session Number:")
-dlg.addField("How long each word appears (sec):", 2.0)
-dlg.addField("Time the '+' stays on screen (sec between each word):", 0.5)
-dlg.addText("Which word types should be shown?")
-include_neutral = dlg.addField("Everyday objects (e.g., table)", True)
-include_aggression = dlg.addField("Aggressive words (e.g., punch)", True)
-include_positive = dlg.addField("Positive words (e.g., love)", True)
-include_negative = dlg.addField("Negative words (e.g., sad)", True)
-include_color = dlg.addField("Color words (e.g., purple)", False)
+# --- 1. Participant Info ---
+expInfo = {
+    'Participant ID': '',
+    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
+    'Show Instructions': True,  # Toggle for instructions
+    'Practice Trials': True,    # Toggle for practice
+    'Number of Practice Trials': 10,  # How many practice trials
+    'Number of Main Trials': 100,     # How many main trials
+    'Stimulus Duration (sec)': 0.5,   # How long each word shows
+    'Response Window (sec)': 2.0,     # Time allowed to respond
+    'ITI Duration (sec)': 0.5         # Time between trials
+}
 
-ok_data = dlg.show()
+dlg = gui.DlgFromDict(expInfo, title="Emotional Stroop Task", 
+                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
+                           'Number of Practice Trials', 'Number of Main Trials', 
+                           'Stimulus Duration (sec)', 'Response Window (sec)', 'ITI Duration (sec)'])
 if not dlg.OK:
     core.quit()
 
 # === EXTRACT CONFIGURATION ===
-participant_id = ok_data[0]
-session_number = ok_data[1]
-stim_time = float(ok_data[2])
-fixation_time = float(ok_data[3])
+participant_id = expInfo['Participant ID']
+session_number = expInfo['Session']
+stim_time = float(expInfo['Stimulus Duration (sec)'])
+fixation_time = float(expInfo['Response Window (sec)'])
 
 selected_categories = {}
-if ok_data[4]: selected_categories['neutral'] = categories['neutral']
-if ok_data[5]: selected_categories['aggression'] = categories['aggression']
-if ok_data[6]: selected_categories['positive'] = categories['positive']
-if ok_data[7]: selected_categories['negative'] = categories['negative']
-if ok_data[8]: selected_categories['color'] = categories['color']
+if expInfo['neutral']: selected_categories['neutral'] = categories['neutral']
+if expInfo['aggression']: selected_categories['aggression'] = categories['aggression']
+if expInfo['positive']: selected_categories['positive'] = categories['positive']
+if expInfo['negative']: selected_categories['negative'] = categories['negative']
+if expInfo['color']: selected_categories['color'] = categories['color']
 
 # === SETUP WINDOW AND STIMULI ===
-win = visual.Window(size=(800, 600), color='black', units='pix')
-fixation = visual.TextStim(win, text='+', color='white')
-stimulus = visual.TextStim(win, text='', color='white', height=50)
-instruction = visual.TextStim(win, text='', color='white', height=30, wrapWidth=700)
+win = visual.Window(size=(1024, 768), color="white", units="pix", fullscr=False)
+instruction_text = visual.TextStim(win, text='', color='black', wrapWidth=800)
+stimulus_text = visual.TextStim(win, text='', color='black', height=0.2)
+feedback_text = visual.TextStim(win, text='', color='green', wrapWidth=800)
+fixation = visual.TextStim(win, text='+', color='black', height=0.1)
+continue_text = visual.TextStim(win, text='Press SPACE to continue', color='black', pos=(0, -300))
 
 clock = core.Clock()
 results = []
@@ -60,18 +67,22 @@ def show_instructions():
     win.flip()
     core.wait(1.5)
 
-    instruction.text = (
-        "Hello!\n\n"
-        "You will see words in different COLORS.\n"
-        "Don't read the word—just look at the COLOR it's written in.\n\n"
-        "Press the button that matches the COLOR.\n\n"
-        "Let's see some examples!"
+    instruction_text.text = (
+        "Welcome to the Color Word Game!\n\n"
+        "Here's how to play:\n"
+        "• Words will appear in different colors\n"
+        "• Press the key that matches the COLOR of the word:\n"
+        "  RED = R key\n"
+        "  BLUE = B key\n"
+        "  GREEN = G key\n"
+        "  YELLOW = Y key\n\n"
+        "Ignore what the word says, just focus on its color!"
     )
-    instruction.height = 30
-    instruction.pos = (0, 100)
-    instruction.draw()
+    instruction_text.height = 30
+    instruction_text.pos = (0, 100)
+    instruction_text.draw()
     win.flip()
-    event.waitKeys()
+    event.waitKeys(keyList=['space'])
 
     # Image examples (use your own images)
     example_images = ['example1.png', 'example2.png']
@@ -81,15 +92,15 @@ def show_instructions():
         win.flip()
         event.waitKeys()
 
-    instruction.text = (
+    instruction_text.text = (
         "Great!\n\n"
         "- Look at the COLOR\n"
         "- Press the matching key\n"
         "- Try to be quick and right!\n\n"
         "Press any key to start practice."
     )
-    instruction.pos = (0, 0)
-    instruction.draw()
+    instruction_text.pos = (0, 0)
+    instruction_text.draw()
     win.flip()
     event.waitKeys()
 
@@ -99,8 +110,8 @@ def run_trial(word, color, category, is_practice=False):
     win.flip()
     core.wait(fixation_time)
 
-    stimulus.text = word
-    stimulus.color = color
+    stimulus_text.text = word
+    stimulus_text.color = color
     win.flip()
 
     clock.reset()
@@ -166,8 +177,8 @@ def save_data(duration):
 show_instructions()
 run_practice()
 
-instruction.text = "Great job! Now the main task will begin.\n\nPress any key to continue."
-instruction.draw()
+instruction_text.text = "Great job! Now the main task will begin.\n\nPress any key to continue."
+instruction_text.draw()
 win.flip()
 event.waitKeys()
 
@@ -178,8 +189,8 @@ duration = round(end_time - start_time, 2)
 
 save_data(duration)
 
-instruction.text = f"Thank you! You're done!\nTotal Time: {duration} seconds.\nPress any key to close."
-instruction.draw()
+instruction_text.text = f"Thank you! You're done!\nTotal Time: {duration} seconds.\nPress any key to close."
+instruction_text.draw()
 win.flip()
 event.waitKeys()
 
