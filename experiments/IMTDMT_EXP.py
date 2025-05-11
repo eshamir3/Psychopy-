@@ -5,24 +5,39 @@ from psychopy import visual, core, event, gui
 import random, csv, os
 
 # ===== PARTICIPANT INFO =====
-info = {'Participant ID':'', 'Session':'1'}
-dlg = gui.DlgFromDict(info, title='IMT/DMT Task')
+expInfo = {
+    'Participant ID': '',
+    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
+    'Show Instructions': True,  # Toggle for instructions
+    'Practice Trials': True,    # Toggle for practice
+    'Number of Blocks': 2,      # How many blocks per task
+    'Block Duration (sec)': 75.0,  # How long each block lasts
+    'Rest Duration (sec)': 15.0,   # Time between blocks
+    'Stimulus Duration (sec)': 0.5, # How long each number shows
+    'Blackout Duration (sec)': 0.5  # Time between numbers
+}
+
+dlg = gui.DlgFromDict(expInfo, title="Number Memory Game", 
+                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
+                           'Number of Blocks', 'Block Duration (sec)', 'Rest Duration (sec)',
+                           'Stimulus Duration (sec)', 'Blackout Duration (sec)'])
 if not dlg.OK:
     core.quit()
-pid = info['Participant ID']
-sess = info['Session']
+
+pid = expInfo['Participant ID']
+sess = expInfo['Session']
 
 # ===== PARAMETERS =====
 # Stimulus properties
 nDigits = 5  # length of stimuli
-stimDur = 0.5    # stimulus duration (s)
-blackoutDur = 0.5  # blackout duration (s)
+stimDur = expInfo['Stimulus Duration (sec)']
+blackoutDur = expInfo['Blackout Duration (sec)']
 
 # Task structure
 taskType = 3       # 1=IMT only,2=DMT only,3=IMT->DMT,4=DMT->IMT
-nBlocksPerTask = 2 # blocks per task for types 3/4
-blockDur = 75.0    # block duration in seconds
-restDur = 15.0     # rest between blocks (s)
+nBlocksPerTask = expInfo['Number of Blocks']
+blockDur = expInfo['Block Duration (sec)']
+restDur = expInfo['Rest Duration (sec)']
 
 # Probabilities (on per-trial basis)
 targetProb = 60
@@ -130,33 +145,49 @@ total_time = total_blocks * (blockDur + restDur)  # Total time in seconds
 total_minutes = int(total_time / 60)
 total_seconds = int(total_time % 60)
 
-# Show duration information
-duration_msg = f"""This experiment will take approximately {total_minutes} minutes and {total_seconds} seconds.
+# Show instructions
+if expInfo['Show Instructions']:
+    instructions = (
+        "Welcome to the Number Matching Game!\n\n"
+        "Here's how to play:\n"
+        "• You'll see two numbers\n"
+        "• If they match, press 'S'\n"
+        "• If they don't match, press 'L'\n"
+        "• Try to be quick but accurate\n\n"
+        "Ready to try? Press any key to start practice!"
+    )
 
-The experiment consists of:
-- 1 practice block ({int(blockDur/60)} minutes)
-- {test_blocks} test blocks ({int(blockDur/60)} minutes each)
-- {total_blocks-1} rest periods ({int(restDur/60)} minutes each)
-
-Press any key to begin practice."""
-
-text.text = duration_msg
-text.draw()
-win.flip()
-event.waitKeys()
+    text.text = instructions
+    text.draw()
+    win.flip()
+    event.waitKeys()
 
 # practice session
-if taskType in (1,4):
-    run_block('IMT','P1')
-if taskType in (2,3):
-    run_block('DMT','P1')
+if expInfo['Practice Trials']:
+    if taskType in (1,4):
+        run_block('IMT','P1')
+    if taskType in (2,3):
+        run_block('DMT','P1')
+
 # test session
 order = []
 if taskType==1: order=['IMT']*nBlocksPerTask
 elif taskType==2: order=['DMT']*nBlocksPerTask
 elif taskType==3: order=['IMT','DMT']*nBlocksPerTask
 else: order=['DMT','IMT']*nBlocksPerTask
-text.text='Begin test: press any key'; text.draw(); win.flip(); event.waitKeys()
+
+text.text = (
+    "Now for the real game!\n\n"
+    "• Press 'S' for matching numbers\n"
+    "• Press 'L' for different numbers\n"
+    "• Try to be quick but accurate\n"
+    "• Take a deep breath and focus\n\n"
+    "Ready? Press any key to begin!"
+)
+text.draw()
+win.flip()
+event.waitKeys()
+
 for idx,mode in enumerate(order, start=1): run_block(mode,idx)
 
 # save data
@@ -168,5 +199,14 @@ with open(fpath,'w',newline='') as f:
     writer.writeheader(); writer.writerows(results)
 
 # end
-text.text='Complete. Thank you!'; text.draw(); win.flip(); event.waitKeys()
-win.close(); core.quit() 
+text.text = (
+    "All done! Thank you for playing!\n\n"
+    "You did a great job with the numbers!\n"
+    "You may now close the window."
+)
+text.draw()
+win.flip()
+core.wait(3.0)
+
+win.close()
+core.quit() 

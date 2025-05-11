@@ -7,8 +7,22 @@ import random
 import os
 
 # --- 1. Participant Info ---
-expInfo = {'Participant': '', 'Session': '001'}
-dlg = gui.DlgFromDict(expInfo, title="Cued Recall Task")
+expInfo = {
+    'Participant ID': '',
+    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
+    'Show Instructions': True,  # Toggle for instructions
+    'Practice Trials': True,    # Toggle for practice
+    'Number of Practice Trials': 2,  # How many practice trials
+    'Number of Main Trials': 12,     # How many main trials
+    'Word Display Time (sec)': 0.5,  # How long each word shows
+    'Number Task Time (sec)': 1.0,   # Time for number comparison
+    'Recall Time (sec)': 5.0         # Time to type answer
+}
+
+dlg = gui.DlgFromDict(expInfo, title="Word Memory Game", 
+                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
+                           'Number of Practice Trials', 'Number of Main Trials', 
+                           'Word Display Time (sec)', 'Number Task Time (sec)', 'Recall Time (sec)'])
 if not dlg.OK:
     core.quit()
 
@@ -23,7 +37,7 @@ try:
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
     
-    filename = os.path.join(data_dir, f"CUEDRECALL_{expInfo['Participant']}_{expInfo['Session']}")
+    filename = os.path.join(data_dir, f"CUEDRECALL_{expInfo['Participant ID']}_{expInfo['Session']}")
     thisExp = data.ExperimentHandler(dataFileName=filename)
 except Exception as e:
     print(f"Error setting up data directory: {str(e)}")
@@ -31,18 +45,18 @@ except Exception as e:
 
 # --- 3. Parameters ---
 # Demo timings (s)
-getReadyDemo = 3.0  # Reduced from 10.0
-instructDemo = 3.0  # Reduced from 10.0
-distractorDemo = 3.0  # Reduced from 10.0
-recallTimeoutDemo = 10.0  # Reduced from 20.0
-stimDemo = 2.0  # Reduced from 5.0
+getReadyDemo = 3.0
+instructDemo = 3.0
+distractorDemo = expInfo['Number Task Time (sec)']
+recallTimeoutDemo = expInfo['Recall Time (sec)']
+stimDemo = expInfo['Word Display Time (sec)']
 
 # Test timings (s)
-getReadyTest = 1.0  # Reduced from 3.0
-instructTest = 1  # Reduced from 1.0
-distractorTest = 1  # Reduced from 1.0
-recallTimeoutTest = 5.0
-stimTest = 0.5  # Reduced from 1.0
+getReadyTest = 1.0
+instructTest = 1.0
+distractorTest = expInfo['Number Task Time (sec)']
+recallTimeoutTest = expInfo['Recall Time (sec)']
+stimTest = expInfo['Word Display Time (sec)']
 iti = 0.5
 
 # Keys for distractor
@@ -91,29 +105,20 @@ input_box = TextBox2(win,
 clock = core.Clock()
 
 # --- 5. Show Instructions ---
-instructions = (
-    "Welcome to the Cued Recall Task!\n\n"
-    "1. TWO lists of words (e.g., birds):\n"
-    "   • FIRST: Say ALOUD\n"
-    "   • SECOND: Read SILENTLY\n"
-    "2. Number task: Press 's' if < 50, 'l' if > 50\n"
-    "3. Recall word from SECOND list\n\n"
-    "Example (bird category):\n"
-    "First list (say aloud):\n"
-    "eagle, robin, falcon, parrot\n"
-    "Second list (read silently):\n"
-    "hawk, penguin, owl, dove\n"
-    "When cued 'bird', type 'penguin'\n"
-    "(the word from the second list)\n\n"
-    "Practice: 2 trials (2 min)\n"
-    "Main: 12 trials (5-7 min)\n\n"
-    "Press SPACE to begin practice."
-)
+if expInfo['Show Instructions']:
+    instructions = (
+        "Welcome to the Word Memory Game!\n\n"
+        "Here's how to play:\n"
+        "• You'll see pairs of words\n"
+        "• Try to remember which words go together\n"
+        "• Later, you'll see one word and need to type its partner\n\n"
+        "Ready to try? Press any key to start practice!"
+    )
 
-instruction_text.text = instructions
-instruction_text.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+    instruction_text.text = instructions
+    instruction_text.draw()
+    win.flip()
+    event.waitKeys()
 
 # --- 6. Functions ---
 def show_msg(msg, wait_key=True, duration=None):
@@ -133,7 +138,7 @@ def present_words(words, duration):
         core.wait(duration)
 
 def run_demo(trial_type):
-    rec = {'participant': expInfo['Participant'], 'session': expInfo['Session'],
+    rec = {'participant': expInfo['Participant ID'], 'session': expInfo['Session'],
            'trialType': 'demo1' if trial_type == 0 else 'demo2'}
     cat = random.choice(list(categories.keys()))
     info = categories[cat]
@@ -195,15 +200,15 @@ def run_demo(trial_type):
     
     # Show feedback
     if rec['recallResponse'] == info['target']:
-        feedback = f"Correct! The target word was: {info['target']}"
+        feedback = f"Great job! You remembered: {info['target']} 🎉"
     else:
-        feedback = f"Not quite. The target word was: {info['target']}"
+        feedback = f"Almost! The word was: {info['target']} 💪"
     show_msg(feedback, wait_key=True, duration=None)
     
     core.wait(iti)
 
 def run_test(trial_type, idx):
-    rec = {'participant': expInfo['Participant'], 'session': expInfo['Session'], 'trialNum': idx,
+    rec = {'participant': expInfo['Participant ID'], 'session': expInfo['Session'], 'trialNum': idx,
            'trialType': {2: 'block2_target', 3: 'block2_control', 4: 'block1'}[trial_type]}
     cat = random.choice(list(categories.keys()))
     info = categories[cat]
@@ -314,16 +319,15 @@ for t in (0, 1):
 
 # --- 8. Show Main Experiment Instructions ---
 instruction_text.text = (
-    "Main Experiment Starting\n\n"
-    "12 trials (5-7 min)\n\n"
-    "Remember:\n"
-    "1. You might see one or two lists\n"
-    "2. Say first list ALOUD\n"
-    "3. Read second list SILENTLY (if shown)\n"
-    "4. Do the number task\n"
-    "5. Type the word when cued\n\n"
-    "Press SPACE to begin."
+    "Now for the real game!\n\n"
+    "• Remember which words go together\n"
+    "• Type the matching word when you see its partner\n"
+    "• Take a deep breath and focus\n\n"
+    "Ready? Press any key to begin!"
 )
+instruction_text.draw()
+win.flip()
+event.waitKeys()
 
 # --- 9. Run Main Trials ---
 # Full version: 36 trials (12 of each type)
@@ -335,20 +339,15 @@ random.shuffle(trial_types)
 for i, tt in enumerate(trial_types, 1):
     run_test(tt, i)
 
-# --- 10. Save and Exit ---
-try:
-    thisExp.saveAsWideText(filename + '.csv')
-    # Show success message
-    instruction_text.text = f"Data saved successfully to:\n{filename}.csv\n\nThank you for participating!\n\nYou may now close the window."
-    instruction_text.draw()
-    win.flip()
-    core.wait(3.0)
-except Exception as e:
-    # Show error message if saving fails
-    instruction_text.text = f"Error saving data: {str(e)}\n\nPress any key to exit."
-    instruction_text.draw()
-    win.flip()
-    event.waitKeys()
+# --- 10. Goodbye Screen ---
+instruction_text.text = (
+    "All done! Thank you for playing!\n\n"
+    "You did a great job with the words!\n"
+    "You may now close the window."
+)
+instruction_text.draw()
+win.flip()
+core.wait(3.0)
 
 win.close()
 core.quit()

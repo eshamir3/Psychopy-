@@ -6,26 +6,41 @@ from psychopy import visual, core, event, gui
 import random, string, csv
 import os
 
-# ============ GET PARTICIPANT ID ============
-dlg = gui.Dlg(title="Participant Info")
-dlg.addField("Participant ID:")
-if not dlg.show():
-    core.quit()  # user hit cancel
-participant_id = dlg.data[0].strip()
+# ============ GET PARTICIPANT INFO ============
+expInfo = {
+    'Participant ID': '',
+    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
+    'Show Instructions': True,  # Toggle for instructions
+    'Practice Trials': True,    # Toggle for practice
+    'Number of Practice Trials': 3,  # How many practice trials
+    'Number of Main Trials': 6,      # How many main trials
+    'Trigram Duration (sec)': 1.5,   # How long to show letters
+    'Countdown Step': 3,             # How much to count down by
+    'Input Timeout (sec)': 10.0      # Max time to type response
+}
+
+dlg = gui.DlgFromDict(expInfo, title="Letter Memory Game", 
+                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
+                           'Number of Practice Trials', 'Number of Main Trials', 
+                           'Trigram Duration (sec)', 'Countdown Step', 'Input Timeout (sec)'])
+if not dlg.OK:
+    core.quit()
+
+participant_id = expInfo['Participant ID'].strip()
 if not participant_id:
     participant_id = "unknown"
 
 # ============ CONFIGURATION ============
-trigram_duration     = 1.5       # seconds to show the trigram
+trigram_duration     = expInfo['Trigram Duration (sec)']
 instruction_duration = 2.5       # seconds to show the "Count backwards…" instruction
 prompt_duration      = 1.0       # seconds per countdown step
 feedback_duration    = 2.0       # seconds to show practice feedback
 iti                  = 3.0       # inter-trial interval
-backward_step        = 3         # how much to count down each step
-input_timeout        = 10.0      # max seconds to type your response
+backward_step        = expInfo['Countdown Step']
+input_timeout        = expInfo['Input Timeout (sec)']
 
-practice_trials      = 3
-main_trials          = 6         # e.g. 48 in a full study
+practice_trials      = expInfo['Number of Practice Trials']
+main_trials          = expInfo['Number of Main Trials']
 recall_delays        = [3, 6, 9] # seconds of backward counting
 
 # ============ SETUP WINDOW & STIMULI ============
@@ -36,6 +51,8 @@ prompt_stim = visual.TextStim(win,
                               pos=(0, -0.2),
                               color='black',
                               height=0.05)
+instruction_text = visual.TextStim(win, text='', color='black', height=0.07, wrapWidth=1.2)
+feedback_text = visual.TextStim(win, text='', color='black', height=0.07, wrapWidth=1.2)
 
 # ============ HELPER FUNCTIONS ============
 
@@ -118,14 +135,37 @@ def run_trial(is_practice=False):
 # ============ RUN THE TASK ============
 
 # Instructions & practice
-show_text(
-    "Welcome to the Consonant Trigram Task.\n\n"
-    "You will see 3 letters, then count backwards,\n"
-    "and then type the letters you saw.\n\n"
-    "Press any key to start PRACTICE."
-)
-for _ in range(practice_trials):
-    run_trial(is_practice=True)
+if expInfo['Show Instructions']:
+    instructions = (
+        "Welcome to the Letter Memory Game!\n\n"
+        "Here's how to play:\n"
+        "• You'll see 3 letters appear\n"
+        "• Try to remember them\n"
+        "• Then count backwards from 100 by 3\n"
+        "• Finally, type the letters you saw\n\n"
+        "Ready to try? Press any key to start practice!"
+    )
+
+    instruction_text.text = instructions
+    instruction_text.draw()
+    win.flip()
+    event.waitKeys()
+
+if expInfo['Practice Trials']:
+    for _ in range(practice_trials):
+        tri, resp, corr = run_trial(is_practice=True)
+        # Feedback
+        if corr:
+            feedback_text.text = "Great job!"
+        else:
+            feedback_text.text = "Remember to type all three letters!"
+        
+        feedback_text.draw()
+        win.flip()
+        core.wait(0.75)
+
+        if any(k[0] == 'escape' for k in keys):
+            core.quit()
 
 # Estimate total duration
 avg_delay      = sum(recall_delays) / len(recall_delays)
@@ -136,11 +176,17 @@ per_trial_time = (trigram_duration +
                   iti)
 est_minutes    = int((per_trial_time * main_trials) / 60) + 1
 
-show_text(
-    f"Practice done! No feedback in the main test.\n\n"
-    f"Estimated duration: {est_minutes} minutes.\n\n"
-    "Press any key to begin."
+instruction_text.text = (
+    "Now for the real game!\n\n"
+    "• Remember the 3 letters\n"
+    "• Count backwards by 3\n"
+    "• Type the letters when asked\n"
+    "• Take a deep breath and focus\n\n"
+    "Ready? Press any key to begin!"
 )
+instruction_text.draw()
+win.flip()
+event.waitKeys()
 
 # Main experiment
 results = []
@@ -167,10 +213,21 @@ try:
         writer.writerows(results)
     
     # Show success message
-    show_text(f"Data saved successfully to:\n{filename}\n\nPress any key to exit.")
+    instruction_text.text = (
+        "All done! Thank you for playing!\n\n"
+        "You did a great job with the letters!\n"
+        "You may now close the window."
+    )
+    instruction_text.draw()
+    win.flip()
+    core.wait(3.0)
 except Exception as e:
     # Show error message if saving fails
-    show_text(f"Error saving data: {str(e)}\n\nPress any key to exit.")
+    show_text(
+        f"Oops! Something went wrong: {str(e)}\n\n"
+        "Please let the experimenter know.\n\n"
+        "Press any key to exit."
+    )
 
 win.close()
 core.quit()

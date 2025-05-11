@@ -4,8 +4,16 @@ import random
 import os
 
 # --- 1. Participant Info ---
-expInfo = {'Participant': '', 'Session': '001'}
-dlg = gui.DlgFromDict(expInfo, title="Value Choice Experiment")
+expInfo = {
+    'Participant ID': '',
+    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
+    'Show Instructions': True,  # Toggle for instructions
+    'Practice Trials': True,    # Toggle for practice
+    'Trial Duration (sec)': 5.0  # How long each choice stays on screen
+}
+
+dlg = gui.DlgFromDict(expInfo, title="Value Choice Experiment", 
+                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 'Trial Duration (sec)'])
 if not dlg.OK:
     core.quit()
 
@@ -20,7 +28,7 @@ try:
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
     
-    filename = os.path.join(data_dir, f"VALUECHOICE_{expInfo['Participant']}_{expInfo['Session']}")
+    filename = os.path.join(data_dir, f"VALUECHOICE_{expInfo['Participant ID']}_{expInfo['Session']}")
     thisExp = data.ExperimentHandler(dataFileName=filename)
 except Exception as e:
     print(f"Error setting up data directory: {str(e)}")
@@ -44,38 +52,48 @@ stim_pairs = [
 random.shuffle(stim_pairs)
 
 # --- 5. Show Instructions ---
-instructions = (
-    "In this task, you'll be shown two real-life scenarios.\n\n"
-    "Press LEFT to choose the option on the left.\n"
-    "Press RIGHT to choose the option on the right.\n\n"
-    "Press SPACE to start a short practice round."
-)
+if expInfo['Show Instructions']:
+    instructions = (
+        "Welcome to the Value Choice Game!\n\n"
+        "You'll see two choices on the screen:\n"
+        "• LEFT side: Press the LEFT arrow key\n"
+        "• RIGHT side: Press the RIGHT arrow key\n\n"
+        "Choose what you think is best!\n"
+        "There are no wrong answers - just pick what you prefer.\n\n"
+        "Ready to try? Press SPACE to start!"
+    )
 
-instruction_text.text = instructions
-instruction_text.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+    instruction_text.text = instructions
+    instruction_text.draw()
+    win.flip()
+    event.waitKeys(keyList=['space'])
 
 # --- 6. Practice Trial ---
-practice_pair = ("Receive $10 today", "Receive $15 in one week")
-left_text.text = practice_pair[0]
-right_text.text = practice_pair[1]
+if expInfo['Practice Trials']:
+    practice_pair = ("Receive $10 today", "Receive $15 in one week")
+    left_text.text = practice_pair[0]
+    right_text.text = practice_pair[1]
 
-left_text.draw()
-right_text.draw()
-win.flip()
-practice_keys = event.waitKeys(keyList=['left', 'right'])
+    instruction_text.text = "Let's practice! Choose one option:"
+    instruction_text.draw()
+    left_text.draw()
+    right_text.draw()
+    win.flip()
+    practice_keys = event.waitKeys(keyList=['left', 'right'])
 
-practice_choice = practice_pair[0] if 'left' in practice_keys else practice_pair[1]
-feedback_text.text = f"You chose:\n{practice_choice}"
-feedback_text.draw()
-win.flip()
-core.wait(1.5)
+    practice_choice = practice_pair[0] if 'left' in practice_keys else practice_pair[1]
+    feedback_text.text = f"Great choice! You picked:\n{practice_choice}\n\nPress SPACE to continue!"
+    feedback_text.draw()
+    win.flip()
+    event.waitKeys(keyList=['space'])
 
 # --- 7. Pre-experiment Prompt ---
 instruction_text.text = (
-    "The actual experiment will now begin and will take about 2–3 minutes.\n\n"
-    "Press SPACE to continue."
+    "Now for the real game!\n\n"
+    "• You'll see 5 different choices\n"
+    "• Take your time to think\n"
+    "• Choose what feels right to you\n\n"
+    "Ready? Press SPACE to start!"
 )
 instruction_text.draw()
 win.flip()
@@ -108,7 +126,11 @@ for i, (stim1, stim2) in enumerate(stim_pairs):
     thisExp.nextEntry()
 
 # --- 9. Goodbye Screen ---
-instruction_text.text = "Thank you for participating!\n\nYou may now close the window."
+instruction_text.text = (
+    "All done! Thank you for playing!\n\n"
+    "You did a great job making choices.\n"
+    "You may now close the window."
+)
 instruction_text.draw()
 win.flip()
 core.wait(3.0)
