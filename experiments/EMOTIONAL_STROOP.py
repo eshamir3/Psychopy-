@@ -18,14 +18,14 @@ practice_words = ["one", "two", "three", "four", "five", "six", "seven", "eight"
 dlg = gui.Dlg(title="Stroop Task Settings")
 dlg.addField("Participant ID:")
 dlg.addField("Session Number:")
-dlg.addField("Stimulus Duration (sec):", 2.0)
-dlg.addField("Fixation Duration (sec):", 0.5)
-dlg.addText("Select Categories:")
-include_neutral = dlg.addField("Neutral", True)
-include_aggression = dlg.addField("Aggression", True)
-include_positive = dlg.addField("Positive", True)
-include_negative = dlg.addField("Negative", True)
-include_color = dlg.addField("Color (Control)", False)
+dlg.addField("How long each word appears (sec):", 2.0)
+dlg.addField("Time the '+' stays on screen (sec between each word):", 0.5)
+dlg.addText("Which word types should be shown?")
+include_neutral = dlg.addField("Everyday objects (e.g., table)", True)
+include_aggression = dlg.addField("Aggressive words (e.g., punch)", True)
+include_positive = dlg.addField("Positive words (e.g., love)", True)
+include_negative = dlg.addField("Negative words (e.g., sad)", True)
+include_color = dlg.addField("Color words (e.g., purple)", False)
 
 ok_data = dlg.show()
 if not dlg.OK:
@@ -55,14 +55,40 @@ results = []
 
 # === INSTRUCTIONS ===
 def show_instructions():
-    text = (
-        "Welcome to the Emotional Stroop Task.\n\n"
-        "You will see words in different colors.\n"
-        "Your job is to press the key corresponding to the color of the word, ignoring its meaning:\n\n"
-        f"  {keys['red']} = RED\n  {keys['green']} = GREEN\n  {keys['blue']} = BLUE\n  {keys['yellow']} = YELLOW\n\n"
-        "Respond as quickly and accurately as possible.\n\nPress any key to begin the PRACTICE round."
+    heading = visual.TextStim(win, text="Instructions", color='white', height=60, pos=(0, 250))
+    heading.draw()
+    win.flip()
+    core.wait(1.5)
+
+    instruction.text = (
+        "Hello!\n\n"
+        "You will see words in different COLORS.\n"
+        "Don't read the word—just look at the COLOR it's written in.\n\n"
+        "Press the button that matches the COLOR.\n\n"
+        "Let's see some examples!"
     )
-    instruction.text = text
+    instruction.height = 30
+    instruction.pos = (0, 100)
+    instruction.draw()
+    win.flip()
+    event.waitKeys()
+
+    # Image examples (use your own images)
+    example_images = ['example1.png', 'example2.png']
+    for img_file in example_images:
+        image = visual.ImageStim(win, image=img_file, size=(600, 400))
+        image.draw()
+        win.flip()
+        event.waitKeys()
+
+    instruction.text = (
+        "Great!\n\n"
+        "- Look at the COLOR\n"
+        "- Press the matching key\n"
+        "- Try to be quick and right!\n\n"
+        "Press any key to start practice."
+    )
+    instruction.pos = (0, 0)
     instruction.draw()
     win.flip()
     event.waitKeys()
@@ -90,6 +116,7 @@ def run_trial(word, color, category, is_practice=False):
     else:
         key, rt = None, None
         correct = False
+        response_color = None
 
     if not is_practice:
         results.append({
@@ -99,7 +126,7 @@ def run_trial(word, color, category, is_practice=False):
             'color': color,
             'category': category,
             'response_key': key,
-            'response_color': response_color if key else None,
+            'response_color': response_color,
             'correct': int(correct),
             'rt': round(rt * 1000) if rt else None
         })
@@ -151,7 +178,7 @@ duration = round(end_time - start_time, 2)
 
 save_data(duration)
 
-instruction.text = f"Thank you! The task is complete.\nDuration: {duration} seconds.\nYou may now exit the experiment."
+instruction.text = f"Thank you! You're done!\nTotal Time: {duration} seconds.\nPress any key to close."
 instruction.draw()
 win.flip()
 event.waitKeys()
