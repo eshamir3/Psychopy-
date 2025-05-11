@@ -10,60 +10,71 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f0f8ff;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #2c3e50;
+            color: #1e3a8a;
             text-align: center;
             margin-bottom: 30px;
+            font-size: 2.5em;
         }
         .experiment-card {
             margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             background-color: #fff;
+            transition: transform 0.2s;
+        }
+        .experiment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .experiment-title {
-            color: #3498db;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 15px;
+            font-size: 1.8em;
         }
         .experiment-description {
-            color: #666;
+            color: #4a5568;
             margin-bottom: 20px;
+            font-size: 1.1em;
         }
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
         .button {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
+            padding: 12px 24px;
+            background-color: #1e3a8a;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1.1em;
         }
         .button:hover {
-            background-color: #2980b9;
+            background-color: #2c5282;
+            transform: translateY(-2px);
         }
         .button.secondary {
-            background-color: #2ecc71;
+            background-color: #4299e1;
         }
         .button.secondary:hover {
-            background-color: #27ae60;
+            background-color: #3182ce;
         }
     </style>
 </head>
