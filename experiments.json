@@ -19,7 +19,7 @@
         "path": null
       },
       {
-        "name": "Consonant Trigram Task (Peterson & Peterson, 1959)",
+        "name": "Trigram",
         "description": "Recall the trigram from memory",
         "category": "Memory",
         "path": "experiments/TRIGRAM_EXP.py"

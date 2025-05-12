@@ -149,15 +149,26 @@
                     {% elif experiment.name == 'Go/No-Go Task' %}
                     <!-- Go/No-Go Parameters -->
                     {% elif experiment.name == 'Value Choice' %}
-                    <tr><td>Participant ID</td><td>Unique identifier for the participant</td><td>Required</td></tr>
-                    <tr><td>Session</td><td>Session number (1-10)</td><td>1</td></tr>
-                    <tr><td>Show Instructions</td><td>Display instructions at the beginning</td><td>Yes</td></tr>
-                    <tr><td>Practice Trials</td><td>Run a sample practice trial first</td><td>Yes</td></tr>
-                    <tr><td>Trial Duration (sec)</td><td>Max time allowed to make each choice</td><td>5.0</td></tr>
-                    <tr><td>Feedback Duration (sec)</td><td>How long feedback is shown after each choice</td><td>2.0</td></tr>
-                    <tr><td>Randomize Position</td><td>Randomize which side each option appears on</td><td>Yes</td></tr>
-                    <tr><td># of Trials</td><td>Number of real decision trials</td><td>5</td></tr>
+                        <tr><td>Participant ID</td><td>Unique identifier for the participant</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Session number (1-10)</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display instructions at the beginning</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run a sample practice trial first</td><td>Yes</td></tr>
+                        <tr><td>Trial Duration (sec)</td><td>Max time allowed to make each choice</td><td>5.0</td></tr>
+                        <tr><td>Feedback Duration (sec)</td><td>How long feedback is shown after each choice</td><td>2.0</td></tr>
+                        <tr><td>Randomize Position</td><td>Randomize which side each option appears on</td><td>Yes</td></tr>
+                        <tr><td># of Trials</td><td>Number of real decision trials</td><td>5</td></tr>
+                    {% elif experiment.name|lower|trim == 'trigram' %}
+                        <tr><td>Participant ID</td><td>Unique identifier for the participant</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Session number (1–10)</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display instructions before task</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run a few example rounds first</td><td>Yes</td></tr>
+                        <tr><td>Number of Practice Trials</td><td>How many practice trials to run</td><td>3</td></tr>
+                        <tr><td>Number of Main Trials</td><td>Number of real experimental trials</td><td>6</td></tr>
+                        <tr><td>Trigram Duration (sec)</td><td>How long the trigram appears</td><td>1.5</td></tr>
+                        <tr><td>Countdown Step</td><td>How much to subtract in mental countdown</td><td>3</td></tr>
+                        <tr><td>Input Timeout (sec)</td><td>Max time to type your response</td><td>10.0</td></tr>
                     {% endif %}
+
                 </table>
             </div>
         </div>
@@ -179,7 +190,17 @@
                     <li>Feedback will show your choice after each trial</li>
                     <li>There are no right or wrong answers – choose what feels right</li>
                 </ul>
+                {% elif experiment.name|lower|trim == 'trigram' %}
+                    <ul>
+                    <li>You will see three random letters appear (e.g., DKT)</li>
+                    <li>Remember them in the correct order</li>
+                    <li>Then, a number will be shown (e.g., 300)</li>
+                    <li>You must count backwards by a set amount (e.g., by 3s) in your head</li>
+                    <li>After a few seconds, you'll be prompted to type the letters you saw</li>
+                    <li>Try to be accurate and respond within the time limit</li>
+                    </ul>
                 {% endif %}
+
             </div>
         </div>
 

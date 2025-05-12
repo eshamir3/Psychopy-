@@ -3,6 +3,7 @@ import subprocess
 import os
 import json
 import sys
+import datetime
 
 app = Flask(__name__)
 
@@ -32,38 +33,43 @@ def index():
 def run_experiment(experiment_name):
     global PSYCHOPY_PYTHON_PATH
 
+    # Match experiment
     experiment = next(
         (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
         None
     )
-
     if not experiment:
-        return render_template('error.html', 
-                            message=f"Experiment '{experiment_name}' not found.")
+        return render_template('error.html', message=f"Experiment '{experiment_name}' not found.")
 
-    path = experiment.get('path')
-    if not path:
+    # Resolve full path
+    relative_path = experiment.get('path')
+    if not relative_path:
         return render_template('not_ready.html', exp_name=experiment_name)
 
-    if not os.path.exists(path):
-        return render_template('error.html', 
-                            message=f"Error: File not found at {path}")
+    abs_path = os.path.abspath(relative_path)
+    if not os.path.exists(abs_path):
+        return render_template('error.html', message=f"File not found at: {abs_path}")
+
+    # Create log file
+    os.makedirs("logs", exist_ok=True)
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join("logs", f"{experiment_name.replace(' ', '_')}_{timestamp}.log")
 
     try:
-        # Run the experiment using PsychoPy's runner
-        if sys.platform == 'win32':
-            # On Windows, use the PsychoPy runner directly
-            runner_path = os.path.join(os.path.dirname(PSYCHOPY_PYTHON_PATH), 'runner.py')
-            subprocess.Popen([PSYCHOPY_PYTHON_PATH, runner_path, path], 
-                           creationflags=subprocess.CREATE_NEW_CONSOLE)
-        else:
-            # On other platforms, try to run the experiment directly
-            subprocess.Popen([PSYCHOPY_PYTHON_PATH, path])
-            
+        with open(log_file, 'w') as log_output:
+            subprocess.Popen(
+                [PSYCHOPY_PYTHON_PATH, abs_path],
+                stdout=log_output,
+                stderr=subprocess.STDOUT,
+                cwd=os.path.dirname(abs_path),
+                creationflags=subprocess.CREATE_NEW_CONSOLE if sys.platform == 'win32' else 0
+            )
         return render_template('experiment_running.html', experiment_name=experiment_name)
+    
     except Exception as e:
-        return render_template('error.html', 
-                            message=f"Error launching experiment: {str(e)}")
+        return render_template('error.html', message=f"Error launching experiment: {str(e)}")
+
+    
 
 @app.route('/manual/<experiment_name>')
 def view_manual(experiment_name):
