@@ -7,84 +7,90 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f3f4f6;
             color: #111827;
             margin: 0;
             padding: 0;
         }
     
         .manual-container {
-            max-width: 840px;
-            margin: 40px auto;
-            padding: 40px;
-            background-color: white;
+            max-width: 860px;
+            margin: 50px auto;
+            padding: 48px;
+            background-color: #ffffff;
             border-radius: 16px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
     
         .manual-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
         }
     
         .manual-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.25em;
+            font-size: 2.2rem;
+            margin-bottom: 0.3em;
+            color: #1e293b;
         }
     
         .subtitle {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #475569;
         }
     
         .manual-section {
-            margin-bottom: 40px;
+            margin-bottom: 48px;
         }
     
         .manual-section h3 {
-            color: #1f2937;
-            font-size: 1.25rem;
-            margin-bottom: 16px;
+            color: #1e293b;
+            font-size: 1.35rem;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 6px;
+            margin-bottom: 20px;
         }
     
         .key-points, .note {
-            background-color: #f9fafb;
+            background-color: #f8fafc;
             padding: 20px;
-            border-left: 4px solid #3b82f6;
+            border-left: 5px solid #3b82f6;
             border-radius: 8px;
-            color: #1f2937;
+            color: #1e293b;
         }
     
         ul {
-            padding-left: 20px;
-            margin: 10px 0;
+            padding-left: 22px;
+            margin: 12px 0;
         }
     
         li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
     
         .parameter-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-        }
-    
-        .parameter-table th,
-        .parameter-table td {
-            border: 1px solid #e5e7eb;
-            padding: 12px;
-            text-align: left;
+            margin-top: 12px;
+            font-size: 0.98rem;
         }
     
         .parameter-table th {
-            background-color: #f1f5f9;
+            background-color: #e5e7eb; /* ✅ Light gray for header */
+            color: #1e293b;
             font-weight: 600;
+            padding: 14px;
+            border: 1px solid #d1d5db;
         }
     
-        .parameter-table tr:hover {
+        .parameter-table td {
+            background-color: #ffffff;
+            color: #1f2937;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+        }
+    
+        .parameter-table tr:hover td {
             background-color: #f9fafb;
         }
     
@@ -98,19 +104,21 @@
         .manual-button {
             background-color: #2563eb;
             color: white;
-            padding: 12px 24px;
+            padding: 12px 28px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 500;
-            transition: background-color 0.2s ease;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
         }
     
         .experiment-button:hover,
         .manual-button:hover {
             background-color: #1d4ed8;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
-    
     
 </head>
 <body>
