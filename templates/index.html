@@ -32,8 +32,12 @@
         <div class="experiment-grid">
             {% for experiment in experiments if experiment.category == category %}
             <div class="experiment-card">
-                <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">{{ experiment.name }}</a>
+                <h3 class="experiment-title">{{ experiment.name }}</h3>
                 <p class="description">{{ experiment.description }}</p>
+                <div class="button-group">
+                    <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">Run Experiment</a>
+                    <a href="{{ url_for('view_manual', experiment_name=experiment.name) }}" class="manual-button">View Manual</a>
+                </div>
             </div>
             {% endfor %}
         </div>

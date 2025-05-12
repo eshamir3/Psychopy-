@@ -110,26 +110,75 @@ h2 {
     box-shadow: 0 6px 15px rgba(0,0,0,0.5);
 }
 
-.experiment-button {
+.experiment-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.description {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #d0d0d0;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.experiment-button, .manual-button {
     display: inline-block;
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    background-color: #6a4fd8;
-    border-radius: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
     text-decoration: none;
-    font-size: 20px;
-    color: white;
+    font-size: 16px;
+    font-weight: 600;
     transition: 0.3s;
+}
+
+.experiment-button {
+    background-color: #6a4fd8;
+    color: white;
 }
 
 .experiment-button:hover {
     background-color: #816ee0;
+    transform: translateY(-2px);
 }
 
-.description {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #d0d0d0;
+.manual-button {
+    background-color: #3c4f65;
+    color: white;
+}
+
+.manual-button:hover {
+    background-color: #5a6e88;
+    transform: translateY(-2px);
+}
+
+/* Top Navigation Styles */
+.top-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #2a3340;
+    padding: 8px 12px;
+    border-bottom-left-radius: 8px;
+    z-index: 1000;
+}
+
+.top-nav a {
+    color: #f0f0f0;
+    margin: 0 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.top-nav a:hover {
+    text-decoration: underline;
 }
 
 /* Running Experiment Page */
@@ -169,68 +218,63 @@ h2 {
     margin-bottom: 60px;
 }
 
-/* Top Navigation Styles */
-.top-nav {
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: white;
-    padding: 8px 12px;
-    border-bottom-left-radius: 8px;
-    z-index: 1000;
+/* Manual Page Styles */
+.manual-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #2a3340;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-.top-nav a {
-    color: #121820;
-    margin: 0 8px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
+.manual-header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-.top-nav a:hover {
-    text-decoration: underline;
+.manual-section {
+    margin-bottom: 30px;
 }
 
-/* Contact Page Styles */
-.contact-container {
-    margin: 100px auto;
-    max-width: 500px;
+.manual-section h3 {
+    color: #f0f0f0;
+    margin-bottom: 15px;
+}
+
+.key-points {
+    background-color: #3c4f65;
+    padding: 20px;
+    border-left: 4px solid #5a6ee5;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.note {
     background-color: #2a3340;
     padding: 20px;
-    border-radius: 16px;
+    border-left: 4px solid #6a4fd8;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.parameter-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.parameter-table th, .parameter-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #3c4f65;
+}
+
+.parameter-table th {
+    background-color: #3c4f65;
     color: #f0f0f0;
 }
-.contact-container h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.contact-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.contact-container label {
-    font-size: 14px;
-}
-.contact-container input,
-.contact-container textarea {
-    padding: 8px;
-    border: 1px solid #5a6ee5;
-    border-radius: 8px;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.contact-container button {
-    padding: 10px 20px;
-    background-color: #5a6ee5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-}
-.contact-container button:hover {
-    background-color: #7f90f0;
+
+.parameter-table tr:hover {
+    background-color: #2a3340;
 }
