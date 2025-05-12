@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for
 import subprocess
 import os
 import json
+import sys
 
 app = Flask(__name__)
 
@@ -29,36 +30,57 @@ def index():
 
 @app.route('/run/<experiment_name>')
 def run_experiment(experiment_name):
+    global PSYCHOPY_PYTHON_PATH
+
     experiment = next(
         (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
         None
     )
 
     if not experiment:
-        return f"<h1>Experiment '{experiment_name}' not found. 🚧</h1><br><a href='/'>Return Home</a>"
+        return render_template('error.html', 
+                            message=f"Experiment '{experiment_name}' not found.")
 
     path = experiment.get('path')
     if not path:
-        return f"<h1>Experiment '{experiment_name}' is not ready yet. 🚧</h1><br><a href='/'>Return Home</a>"
+        return render_template('not_ready.html', exp_name=experiment_name)
 
     if not os.path.exists(path):
-        return f"<h1>Error: File not found at <code>{path}</code> 🚧</h1><br><a href='/'>Return Home</a>"
+        return render_template('error.html', 
+                            message=f"Error: File not found at {path}")
 
     try:
-        subprocess.Popen([PSYCHOPY_PYTHON_PATH, path])
+        # Run the experiment using PsychoPy's runner
+        if sys.platform == 'win32':
+            # On Windows, use the PsychoPy runner directly
+            runner_path = os.path.join(os.path.dirname(PSYCHOPY_PYTHON_PATH), 'runner.py')
+            subprocess.Popen([PSYCHOPY_PYTHON_PATH, runner_path, path], 
+                           creationflags=subprocess.CREATE_NEW_CONSOLE)
+        else:
+            # On other platforms, try to run the experiment directly
+            subprocess.Popen([PSYCHOPY_PYTHON_PATH, path])
+            
         return render_template('experiment_running.html', experiment_name=experiment_name)
     except Exception as e:
-        return f"<h1>Error launching experiment: {str(e)} 🚧</h1><br><a href='/'>Return Home</a>"
+        return render_template('error.html', 
+                            message=f"Error launching experiment: {str(e)}")
+
+@app.route('/manual/<experiment_name>')
+def view_manual(experiment_name):
+    experiment = next(
+        (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
+        None
+    )
+    
+    if not experiment:
+        return render_template('error.html', 
+                            message=f"Manual for '{experiment_name}' not found.")
+    
+    return render_template('manual.html', experiment=experiment)
 
 @app.route('/learn_more')
 def learn_more():
-    return """
-    <h1>Learn More</h1>
-    <p>This platform hosts cognitive and behavioral tasks for academic research and internal study use.
-    Carefully structured tasks measure attention, memory, decision making, and processing speed
-    with precision and reliability.</p>
-    <br><a href='/'>Return Home</a>
-    """
+    return render_template('learn_more.html')
 
 @app.route('/contact')
 def contact():

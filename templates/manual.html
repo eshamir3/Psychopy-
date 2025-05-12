@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ experiment.name }} - User Manual</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .manual-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .manual-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .manual-section {
+            margin-bottom: 30px;
+        }
+        
+        .manual-section h3 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        
+        .key-points {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-left: 4px solid #1e3a8a;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note {
+            background-color: #ebf8ff;
+            padding: 20px;
+            border-left: 4px solid #4299e1;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="manual-container">
+        <div class="manual-header">
+            <h1>{{ experiment.name }}</h1>
+            <p class="subtitle">{{ experiment.description }}</p>
+        </div>
+
+        <div class="manual-section">
+            <h3>Overview</h3>
+            <p>This experiment is designed to measure cognitive processes related to {{ experiment.category.lower() }}. Follow the instructions carefully to ensure accurate results.</p>
+        </div>
+
+        <div class="manual-section">
+            <h3>Experiment Parameters</h3>
+            <div class="key-points">
+                <table class="parameter-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                    {% if experiment.name == 'Emotional Stroop Task' %}
+                    <tr>
+                        <td>Participant ID</td>
+                        <td>Unique identifier for the participant</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td>Session</td>
+                        <td>Session number (1-10)</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Show Instructions</td>
+                        <td>Display experiment instructions</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Practice Trials</td>
+                        <td>Enable practice trials</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Practice Trials</td>
+                        <td>How many practice trials to run</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Main Trials</td>
+                        <td>How many main experiment trials to run</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>Stimulus Duration</td>
+                        <td>How long each word shows (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>Response Window</td>
+                        <td>Time allowed to respond (seconds)</td>
+                        <td>2.0</td>
+                    </tr>
+                    <tr>
+                        <td>ITI Duration</td>
+                        <td>Time between trials (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    {% elif experiment.name == 'N-Back Task' %}
+                    <tr>
+                        <td>Participant ID</td>
+                        <td>Unique identifier for the participant</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td>Session</td>
+                        <td>Session number (1-10)</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Show Instructions</td>
+                        <td>Display experiment instructions</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Practice Trials</td>
+                        <td>Enable practice trials</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Practice Trials</td>
+                        <td>How many practice trials to run</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Main Trials</td>
+                        <td>How many main experiment trials to run</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>N-Back Level</td>
+                        <td>How many items back to remember</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Stimulus Duration</td>
+                        <td>How long each letter shows (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>Response Window</td>
+                        <td>Time allowed to respond (seconds)</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>ITI Duration</td>
+                        <td>Time between trials (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    {% elif experiment.name == 'Go/No-Go Task' %}
+                    <tr>
+                        <td>Participant ID</td>
+                        <td>Unique identifier for the participant</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td>Session</td>
+                        <td>Session number (1-10)</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Show Instructions</td>
+                        <td>Display experiment instructions</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Practice Trials</td>
+                        <td>Enable practice trials</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Practice Trials</td>
+                        <td>How many practice trials to run</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Main Trials</td>
+                        <td>How many main experiment trials to run</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>Stimulus Duration</td>
+                        <td>How long each letter shows (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>Response Window</td>
+                        <td>Time allowed to respond (seconds)</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>ITI Duration</td>
+                        <td>Time between trials (seconds)</td>
+                        <td>0.5</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+
+        <div class="manual-section">
+            <h3>Instructions</h3>
+            <div class="key-points">
+                {% if experiment.name == 'Emotional Stroop Task' %}
+                <ul>
+                    <li>Words will appear in different colors (red, blue, green, yellow)</li>
+                    <li>Press the key that matches the COLOR of the word:
+                        <ul>
+                            <li>RED = R key</li>
+                            <li>BLUE = B key</li>
+                            <li>GREEN = G key</li>
+                            <li>YELLOW = Y key</li>
+                        </ul>
+                    </li>
+                    <li>Ignore what the word says - focus only on its color</li>
+                </ul>
+                {% elif experiment.name == 'N-Back Task' %}
+                <ul>
+                    <li>Letters will appear one at a time</li>
+                    <li>Press SPACE when the current letter matches the one from N items back</li>
+                    <li>For example, in 2-back:
+                        <ul>
+                            <li>If you see: A → B → A</li>
+                            <li>Press SPACE when the second A appears</li>
+                        </ul>
+                    </li>
+                </ul>
+                {% elif experiment.name == 'Go/No-Go Task' %}
+                <ul>
+                    <li>Letters will appear one at a time</li>
+                    <li>Press SPACE for target letters (e.g., X)</li>
+                    <li>Do NOT press any key for non-target letters</li>
+                    <li>Respond as quickly as possible while maintaining accuracy</li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="manual-section">
+            <h3>Important Notes</h3>
+            <div class="note">
+                <ul>
+                    <li>Find a quiet environment to complete the experiment</li>
+                    <li>Ensure your computer is properly set up and calibrated</li>
+                    <li>Take breaks if needed</li>
+                    <li>Report any technical issues immediately</li>
+                    <li>Complete the experiment in one session if possible</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="button-group" style="margin-top: 40px;">
+            <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">Run Experiment</a>
+            <a href="{{ url_for('index') }}" class="manual-button">← Return to Experiments</a>
+        </div>
+    </div>
+</body>
+</html> 
