@@ -82,12 +82,6 @@
         "name": "Value Choice",
         "description": "Choose between rewards.",
         "category": "Decision Making",
-        "path": null
-      },
-      {
-        "name": "Value Choice (with Script)",
-        "description": "Choose between rewards — includes script path.",
-        "category": "Decision Making",
         "path": "experiments/VALUECHOICE_EXP.py"
       },
       {

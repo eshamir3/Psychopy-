@@ -65,7 +65,8 @@ def contact():
     return render_template('contact.html')
 
 if __name__ == '__main__':
-    x = input("Are you the H? (y/n): ")
-    if x.lower() == 'y':
-        PSYCHOPY_PYTHON_PATH = r"C:\Users\Huize\AppData\Local\Programs\PsychoPy\python.exe"
+    path = r"C:\Users\Huize\AppData\Local\Programs\PsychoPy\python.exe"
+    if os.path.isfile(path):
+        PSYCHOPY_PYTHON_PATH = path
+
     app.run(debug=True)
