@@ -15,7 +15,20 @@ expInfo = {
     'Input Timeout (sec)': 10.0
 }
 
-dlg = gui.DlgFromDict(expInfo, title="Consonant Trigram Task")
+# Add tooltips for clearer parameter descriptions
+tooltips = {
+    'Participant ID': 'Enter your unique identifier (required)',
+    'Session': 'Select your current session number',
+    'Show Instructions': 'Display task instructions before starting',
+    'Practice Trials': 'Run practice trials before the main task',
+    'Number of Practice Trials': 'Number of practice trials to complete',
+    'Number of Main Trials': 'Number of main experiment trials',
+    'Trigram Duration (sec)': 'Time to view the three letters',
+    'Countdown Step': 'Number to count down by (e.g., 3 for 300, 297, 294...)',
+    'Input Timeout (sec)': 'Time allowed to type your response'
+}
+
+dlg = gui.DlgFromDict(expInfo, title="Consonant Trigram Task", tooltips=tooltips)
 if not dlg.OK:
     core.quit()
 
@@ -40,7 +53,7 @@ iti             = 3.0
 # --- Setup Window and Stimuli ---
 win = visual.Window(fullscr=False, color='white', units='height')
 text_stim = visual.TextStim(win, text='', color='black', height=0.07, wrapWidth=1.2)
-prompt_stim = visual.TextStim(win, text="Type the trigram you remembered and press ENTER", pos=(0, -0.2), color='black', height=0.05)
+prompt_stim = visual.TextStim(win, text="Type the three letters you remembered and press ENTER", pos=(0, -0.2), color='black', height=0.05)
 instruction_stim = visual.TextStim(win, text='', color='black', height=0.06, wrapWidth=1.2)
 feedback_stim = visual.TextStim(win, text='', color='black', height=0.06, wrapWidth=1.2)
 
@@ -125,10 +138,12 @@ def run_trial(is_practice=False):
 if show_instructions:
     instruction_stim.text = (
         "1. You will see 3 capital letters (e.g., DKT).\n"
-        "2. Try to memorize them.\n"
+        "2. Try to memorize them in the exact order.\n"
         "3. You will then be shown a number (e.g., 300).\n"
-        "4. Count backward out loud or in your head (e.g., 300, 297, 294...) by the given amount (e.g., 3).\n"
-        "5. After a few seconds, you'll be asked to type the original letters.\n\n"
+        "4. Count backward by the specified amount (e.g., by 3s: 300, 297, 294...).\n"
+        "5. After the countdown, you'll be asked to TYPE the original letters.\n"
+        "6. Type the letters exactly as you saw them and press ENTER.\n"
+        "7. You have a limited time to type your response.\n\n"
         "Press any key to begin practice!"
     )
     instruction_stim.draw()
@@ -151,7 +166,10 @@ instruction_stim.text = (
     f"Now begins the main task.\n\n"
     f"You will complete {n_main} trials.\n"
     f"Estimated time: {int(estimated_time) + 1} minutes.\n\n"
-    f"Stay focused and try your best.\n\n"
+    f"Remember to:\n"
+    f"- Type the letters exactly as you saw them\n"
+    f"- Press ENTER after typing\n"
+    f"- Stay focused and try your best\n\n"
     f"Press any key to begin."
 )
 instruction_stim.draw()

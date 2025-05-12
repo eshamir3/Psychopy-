@@ -118,6 +118,23 @@
             background-color: #1d4ed8;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+        
+        .experiment-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-caption {
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            margin-bottom: 24px;
+        }
     </style>
     
 </head>
@@ -130,7 +147,18 @@
 
         <div class="manual-section">
             <h3>Overview</h3>
-            <p>This experiment is designed to measure cognitive processes related to {{ experiment.category.lower() }}. Participants are asked to choose between hypothetical scenarios (e.g., receive more money in a week or less money today). Follow the instructions carefully to ensure accurate results.</p>
+            <p>This experiment is designed to measure cognitive processes related to {{ experiment.category.lower() }}. Follow the instructions carefully to ensure accurate results.</p>
+            
+            {% if experiment.name|lower|trim == 'trigram' %}
+            <img src="{{ url_for('static', filename='images/trigram_example.png') }}" alt="Trigram Task Example" class="experiment-image">
+            <p class="image-caption">Example of the trigram task showing three letters to remember</p>
+            {% elif experiment.name == 'Value Choice' %}
+            <img src="{{ url_for('static', filename='images/value_choice_example.png') }}" alt="Value Choice Task Example" class="experiment-image">
+            <p class="image-caption">Example of the value choice task interface</p>
+            {% elif experiment.name == 'Emotional Stroop' %}
+            <img src="{{ url_for('static', filename='images/stroop_example.png') }}" alt="Emotional Stroop Task Example" class="experiment-image">
+            <p class="image-caption">Example of the emotional stroop task showing color-word interference</p>
+            {% endif %}
         </div>
 
         <div class="manual-section">
@@ -142,33 +170,34 @@
                         <th>Description</th>
                         <th>Default Value</th>
                     </tr>
-                    {% if experiment.name == 'Emotional Stroop Task' %}
-                    <!-- Stroop Parameters -->
-                    {% elif experiment.name == 'N-Back Task' %}
-                    <!-- N-Back Parameters -->
-                    {% elif experiment.name == 'Go/No-Go Task' %}
-                    <!-- Go/No-Go Parameters -->
+                    {% if experiment.name == 'Emotional Stroop' %}
+                        <tr><td>Participant ID</td><td>Your unique identifier</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Current session number</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display task instructions</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run practice trials first</td><td>Yes</td></tr>
+                        <tr><td>Number of Trials</td><td>Total trials to complete</td><td>50</td></tr>
+                        <tr><td>Stimulus Duration (sec)</td><td>Time to view each word</td><td>1.5</td></tr>
+                        <tr><td>Inter-trial Interval (sec)</td><td>Time between trials</td><td>1.0</td></tr>
                     {% elif experiment.name == 'Value Choice' %}
-                        <tr><td>Participant ID</td><td>Unique identifier for the participant</td><td>Required</td></tr>
-                        <tr><td>Session</td><td>Session number (1-10)</td><td>1</td></tr>
-                        <tr><td>Show Instructions</td><td>Display instructions at the beginning</td><td>Yes</td></tr>
-                        <tr><td>Practice Trials</td><td>Run a sample practice trial first</td><td>Yes</td></tr>
-                        <tr><td>Trial Duration (sec)</td><td>Max time allowed to make each choice</td><td>5.0</td></tr>
-                        <tr><td>Feedback Duration (sec)</td><td>How long feedback is shown after each choice</td><td>2.0</td></tr>
-                        <tr><td>Randomize Position</td><td>Randomize which side each option appears on</td><td>Yes</td></tr>
-                        <tr><td># of Trials</td><td>Number of real decision trials</td><td>5</td></tr>
+                        <tr><td>Participant ID</td><td>Your unique identifier</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Current session number</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display task instructions</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run practice trials first</td><td>Yes</td></tr>
+                        <tr><td>Trial Duration (sec)</td><td>Time to make each choice</td><td>5.0</td></tr>
+                        <tr><td>Feedback Duration (sec)</td><td>Time to view feedback</td><td>2.0</td></tr>
+                        <tr><td>Randomize Position</td><td>Randomize option positions</td><td>Yes</td></tr>
+                        <tr><td>Number of Trials</td><td>Total trials to complete</td><td>5</td></tr>
                     {% elif experiment.name|lower|trim == 'trigram' %}
-                        <tr><td>Participant ID</td><td>Unique identifier for the participant</td><td>Required</td></tr>
-                        <tr><td>Session</td><td>Session number (1–10)</td><td>1</td></tr>
-                        <tr><td>Show Instructions</td><td>Display instructions before task</td><td>Yes</td></tr>
-                        <tr><td>Practice Trials</td><td>Run a few example rounds first</td><td>Yes</td></tr>
-                        <tr><td>Number of Practice Trials</td><td>How many practice trials to run</td><td>3</td></tr>
-                        <tr><td>Number of Main Trials</td><td>Number of real experimental trials</td><td>6</td></tr>
-                        <tr><td>Trigram Duration (sec)</td><td>How long the trigram appears</td><td>1.5</td></tr>
-                        <tr><td>Countdown Step</td><td>How much to subtract in mental countdown</td><td>3</td></tr>
-                        <tr><td>Input Timeout (sec)</td><td>Max time to type your response</td><td>10.0</td></tr>
+                        <tr><td>Participant ID</td><td>Your unique identifier</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Current session number</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display task instructions</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run practice trials first</td><td>Yes</td></tr>
+                        <tr><td>Number of Practice Trials</td><td>Practice trials to complete</td><td>3</td></tr>
+                        <tr><td>Number of Main Trials</td><td>Main experiment trials</td><td>6</td></tr>
+                        <tr><td>Trigram Duration (sec)</td><td>Time to view the letters</td><td>1.5</td></tr>
+                        <tr><td>Countdown Step</td><td>Number to count down by</td><td>3</td></tr>
+                        <tr><td>Input Timeout (sec)</td><td>Time to type response</td><td>10.0</td></tr>
                     {% endif %}
-
                 </table>
             </div>
         </div>
@@ -176,12 +205,103 @@
         <div class="manual-section">
             <h3>Instructions</h3>
             <div class="key-points">
-                {% if experiment.name == 'Emotional Stroop Task' %}
-                <!-- Stroop Instructions -->
-                {% elif experiment.name == 'N-Back Task' %}
-                <!-- N-Back Instructions -->
-                {% elif experiment.name == 'Go/No-Go Task' %}
-                <!-- Go/No-Go Instructions -->
+                {% if experiment.name == 'SART Task' %}
+                <ul>
+                    <li>You will see a series of numbers appear on the screen</li>
+                    <li>Press the spacebar for every number EXCEPT the number 3</li>
+                    <li>If you see the number 3, do NOT press any key</li>
+                    <li>Try to be both fast and accurate</li>
+                    <li>Stay focused throughout the task</li>
+                </ul>
+                {% elif experiment.name == 'Rapid Attention' %}
+                <ul>
+                    <li>You will see targets appear in different locations</li>
+                    <li>Respond as quickly as possible when you see the target</li>
+                    <li>Use the arrow keys to indicate the target's location</li>
+                    <li>Maintain focus on the center of the screen</li>
+                    <li>Try to be both fast and accurate</li>
+                </ul>
+                {% elif experiment.name == 'Focused Blink' %}
+                <ul>
+                    <li>You will see a rapid sequence of letters</li>
+                    <li>Look for two specific target letters</li>
+                    <li>Press the spacebar when you see both targets</li>
+                    <li>Keep your eyes focused on the center</li>
+                    <li>Try to catch all target pairs</li>
+                </ul>
+                {% elif experiment.name == 'Cued Recall Task' %}
+                <ul>
+                    <li>You will see word pairs to remember</li>
+                    <li>Study each pair carefully</li>
+                    <li>Later, you'll see the first word of each pair</li>
+                    <li>Type the word that was paired with it</li>
+                    <li>Try to recall as many pairs as possible</li>
+                </ul>
+                {% elif experiment.name == 'IMT_DMT Task' %}
+                <ul>
+                    <li>You will see a series of numbers</li>
+                    <li>Remember the numbers in order</li>
+                    <li>After a delay, type the numbers you saw</li>
+                    <li>Some trials will have immediate recall</li>
+                    <li>Others will have delayed recall</li>
+                    <li>Try to be accurate with the order</li>
+                </ul>
+                {% elif experiment.name == 'Emotional Stroop' %}
+                <ul>
+                    <li>You will see words appear on the screen in different colors</li>
+                    <li>Your task is to identify the COLOR of the word, not read the word itself</li>
+                    <li>Press the corresponding color key as quickly as possible</li>
+                    <li>Ignore the meaning of the word and focus only on its color</li>
+                    <li>Try to be both fast and accurate</li>
+                </ul>
+                {% elif experiment.name == 'Task Switching' %}
+                <ul>
+                    <li>You will alternate between two different tasks</li>
+                    <li>Follow the task cue shown on screen</li>
+                    <li>Respond according to the current task rules</li>
+                    <li>Be ready to switch tasks quickly</li>
+                    <li>Try to maintain accuracy while switching</li>
+                </ul>
+                {% elif experiment.name == 'Executive Conflict' %}
+                <ul>
+                    <li>You will see conflicting information on screen</li>
+                    <li>Follow the main task instruction</li>
+                    <li>Ignore the distracting information</li>
+                    <li>Respond as quickly and accurately as possible</li>
+                    <li>Stay focused on the primary task</li>
+                </ul>
+                {% elif experiment.name == 'Reaction Speed' %}
+                <ul>
+                    <li>You will see a stimulus appear on screen</li>
+                    <li>Press the spacebar as quickly as possible when you see it</li>
+                    <li>Wait for the stimulus before responding</li>
+                    <li>Try to be as fast as possible</li>
+                    <li>But don't press before the stimulus appears</li>
+                </ul>
+                {% elif experiment.name == 'Visual Search' %}
+                <ul>
+                    <li>You will see a display of items</li>
+                    <li>Look for the target item among distractors</li>
+                    <li>Press the spacebar when you find the target</li>
+                    <li>Search systematically</li>
+                    <li>Try to be both fast and accurate</li>
+                </ul>
+                {% elif experiment.name == 'Motor Response' %}
+                <ul>
+                    <li>You will see different movement cues</li>
+                    <li>Respond with the corresponding movement</li>
+                    <li>Use the arrow keys for direction</li>
+                    <li>Respond as quickly as possible</li>
+                    <li>Try to be accurate with your movements</li>
+                </ul>
+                {% elif experiment.name == 'Decision Risk' %}
+                <ul>
+                    <li>You will make choices between different options</li>
+                    <li>Each option has different probabilities and outcomes</li>
+                    <li>Consider the risks and rewards carefully</li>
+                    <li>Make your choice within the time limit</li>
+                    <li>There are no right or wrong answers</li>
+                </ul>
                 {% elif experiment.name == 'Value Choice' %}
                 <ul>
                     <li>You will see two value-based options displayed as cards</li>
@@ -190,17 +310,26 @@
                     <li>Feedback will show your choice after each trial</li>
                     <li>There are no right or wrong answers – choose what feels right</li>
                 </ul>
+                {% elif experiment.name == 'Strategy Shift' %}
+                <ul>
+                    <li>You will learn a pattern of responses</li>
+                    <li>The pattern will change during the task</li>
+                    <li>Adapt your responses to the new pattern</li>
+                    <li>Try to learn the new pattern quickly</li>
+                    <li>Stay flexible in your approach</li>
+                </ul>
                 {% elif experiment.name|lower|trim == 'trigram' %}
-                    <ul>
+                <ul>
                     <li>You will see three random letters appear (e.g., DKT)</li>
                     <li>Remember them in the correct order</li>
                     <li>Then, a number will be shown (e.g., 300)</li>
-                    <li>You must count backwards by a set amount (e.g., by 3s) in your head</li>
-                    <li>After a few seconds, you'll be prompted to type the letters you saw</li>
+                    <li>You must count backwards by the specified amount (e.g., by 3s) in your head</li>
+                    <li>After the countdown, you'll be prompted to TYPE the letters you saw</li>
+                    <li>Type the letters exactly as you saw them and press ENTER</li>
+                    <li>You have a limited time to type your response</li>
                     <li>Try to be accurate and respond within the time limit</li>
-                    </ul>
+                </ul>
                 {% endif %}
-
             </div>
         </div>
 
@@ -213,6 +342,19 @@
                     <li>Take breaks if needed</li>
                     <li>Report any technical issues immediately</li>
                     <li>Complete the experiment in one session if possible</li>
+                    {% if experiment.name|lower|trim == 'trigram' %}
+                    <li>Make sure your keyboard is working properly for typing responses</li>
+                    <li>Type the letters in the exact order you saw them</li>
+                    {% elif experiment.name == 'Cued Recall Task' or experiment.name == 'IMT_DMT Task' %}
+                    <li>Make sure your keyboard is working properly for typing responses</li>
+                    <li>Type your responses carefully and accurately</li>
+                    {% elif experiment.name == 'Task Switching' or experiment.name == 'Executive Conflict' %}
+                    <li>Stay focused on the current task</li>
+                    <li>Don't let previous trials affect your current response</li>
+                    {% elif experiment.name == 'Reaction Speed' or experiment.name == 'Motor Response' %}
+                    <li>Keep your hands ready on the response keys</li>
+                    <li>Respond as quickly as possible without making mistakes</li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
