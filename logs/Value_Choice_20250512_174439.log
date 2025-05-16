@@ -1,0 +1,10 @@
+35.9631 	WARNING 	Monitor specification not found. Creating a temporary one...
+41.1854 	WARNING 	Couldn't measure a consistent frame rate!
+  - Is your graphics card set to sync to vertical blank?
+  - Are you running other processes on your computer?
+
+41.4241 	WARNING 	t of last frame was 239.84ms (=1/4)
+77.2686 	WARNING 	t of last frame was 35844.44ms (=1/0)
+78.3166 	WARNING 	t of last frame was 1047.99ms (=1/0)
+83.3339 	WARNING 	t of last frame was 5017.32ms (=1/0)
+101.4723 	WARNING 	Multiple dropped frames have occurred - I'll stop bothering you about them!
