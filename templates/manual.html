@@ -197,6 +197,17 @@
                         <tr><td>Trigram Duration (sec)</td><td>Time to view the letters</td><td>1.5</td></tr>
                         <tr><td>Countdown Step</td><td>Number to count down by</td><td>3</td></tr>
                         <tr><td>Input Timeout (sec)</td><td>Time to type response</td><td>10.0</td></tr>
+                    {% elif experiment.name == 'Immediate and Delayed Memory Task' %}
+                        <tr><td>Participant ID</td><td>Your unique identifier</td><td>Required</td></tr>
+                        <tr><td>Session</td><td>Current session number (1–10)</td><td>1</td></tr>
+                        <tr><td>Show Instructions</td><td>Display task instructions before starting</td><td>Yes</td></tr>
+                        <tr><td>Practice Trials</td><td>Run IMT and DMT practice rounds</td><td>Yes</td></tr>
+                        <tr><td>Number of IMT Practice Trials</td><td>How many IMT practice trials to run</td><td>2</td></tr>
+                        <tr><td>Number of DMT Practice Trials</td><td>How many DMT practice trials to run</td><td>2</td></tr>
+                        <tr><td>Number of IMT Experiment Trials</td><td>Trials in the main IMT block</td><td>15</td></tr>
+                        <tr><td>Number of DMT Experiment Trials</td><td>Trials in the main DMT block</td><td>15</td></tr>
+                        <tr><td>Stimulus Duration (s)</td><td>Time each number is displayed</td><td>2.0</td></tr>
+                        <tr><td>Task Order</td><td>Sequence of IMT and DMT blocks</td><td>IMT→DMT</td></tr>
                     {% endif %}
                 </table>
             </div>
@@ -329,7 +340,22 @@
                     <li>You have a limited time to type your response</li>
                     <li>Try to be accurate and respond within the time limit</li>
                 </ul>
-                {% endif %}
+                {% elif experiment.name== 'Immediate and Delayed Memory Task' %}
+                <ul>
+                    <li>You will see a 5-digit number appear on the screen.</li>
+                    <li>
+                        In <strong>IMT (Immediate Memory Task)</strong>, the next number appears immediately.
+                    </li>
+                    <li>
+                        In <strong>DMT (Delayed Memory Task)</strong>, if the numbers match, you will first see
+                        three identical distractor numbers (“12345”) before the second number appears.
+                    </li>
+                    <li>After the second number, press <strong>S</strong> if it’s the same as the first, or <strong>D</strong> if it’s different.</li>
+                    <li>You have up to 5 seconds to respond each trial; if you do not respond in time, you will see a warning.</li>
+                    <li>Practice rounds for both IMT and DMT are provided before the main experiment begins.</li>
+                    <li>Your accuracy and reaction time are recorded on every trial.</li>
+                </ul>
+            {% endif %}
             </div>
         </div>
 

@@ -31,8 +31,8 @@
         "path": "experiments/CUEDRECALL_EXP.py"
       },
       {
-        "name": "IMT_DMT Task",
-        "description": "Immediate & Delayed Memory Task (Dougherty et al., 2002)",
+        "name": "Immediate and Delayed Memory Task",
+        "description": "Digit matching task. One fast. One slow.",
         "category": "Memory",
         "path": "experiments/IMTDMT_EXP.py"
       },

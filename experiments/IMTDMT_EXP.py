@@ -1,212 +1,196 @@
 # Immediate & Delayed Memory Task (IMT/DMT) in PsychoPy
-# Implements practice + test sessions per Dougherty et al. (2002)
+# Simplified: only essential parameters, streamlined flow, with DMT distractor page and grouped main rounds
 
 from psychopy import visual, core, event, gui
-import random, csv, os
+import random, csv, os, datetime
 
-# ===== PARTICIPANT INFO =====
+# === Participant Info and Parameters ===
 expInfo = {
     'Participant ID': '',
-    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
-    'Show Instructions': True,  # Toggle for instructions
-    'Practice Trials': True,    # Toggle for practice
-    'Number of Blocks': 2,      # How many blocks per task
-    'Block Duration (sec)': 75.0,  # How long each block lasts
-    'Rest Duration (sec)': 15.0,   # Time between blocks
-    'Stimulus Duration (sec)': 0.5, # How long each number shows
-    'Blackout Duration (sec)': 0.5  # Time between numbers
+    'Session': [str(i) for i in range(1,11)],  # 10 sessions
+    'Show Instructions': True,
+    'Practice Trials': True,
+    'Number of IMT Practice Trials': '2',
+    'Number of DMT Practice Trials': '2',
+    'Number of IMT Experiment Trials': '15',
+    'Number of DMT Experiment Trials': '15',
+    'Stimulus Duration (s)': '2.0',
+    'Task Order': ['IMT->DMT', 'DMT->IMT', 'IMT only', 'DMT only']
 }
 
-dlg = gui.DlgFromDict(expInfo, title="Number Memory Game", 
-                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
-                           'Number of Blocks', 'Block Duration (sec)', 'Rest Duration (sec)',
-                           'Stimulus Duration (sec)', 'Blackout Duration (sec)'])
+dlg = gui.DlgFromDict(expInfo, title="IMT/DMT Experiment")
 if not dlg.OK:
     core.quit()
 
+# Fixed parameters (not exposed)
+BLACKOUT = 2.0          # seconds blank between stimuli
+REST = 3.0              # seconds rest after each block
+MIN_RT = 0.1            # minimal valid RT (s)
+RESPONSE_TIMEOUT = 5.0  # seconds to wait for response
+N_DIGITS = 5
+DISTRACTOR = '12345'[:N_DIGITS]
+DMT_DISTRACTORS = 3     # number of distractors in DMT
+TARGET_PROB = 60
+CATCH_PROB = 0
+FILLER_PROB = 40
+STIM_SIZE = 0.1         # font height
+
+# Setup window and stimuli
+win = visual.Window(fullscr=False, color='white', units='norm')
+text = visual.TextStim(win, '', height=STIM_SIZE, color='black', wrapWidth=1.5)
+feedback = visual.TextStim(win, '', height=0.08, color='blue', wrapWidth=1.5)
+clock = core.Clock()
+results = []
+
+# Helpers: safe convert
+safe_int = lambda v,d: int(v) if str(v).isdigit() else d
+safe_float = lambda v,d: float(v) if str(v).replace('.','',1).isdigit() else d
+
+# Extract parameters
+stimDur = safe_float(expInfo['Stimulus Duration (s)'], 2.0)
+nIMT_practice = safe_int(expInfo['Number of IMT Practice Trials'], 2)
+nDMT_practice = safe_int(expInfo['Number of DMT Practice Trials'], 2)
+nIMT_main = safe_int(expInfo['Number of IMT Experiment Trials'], 15)
+nDMT_main = safe_int(expInfo['Number of DMT Experiment Trials'], 15)
 pid = expInfo['Participant ID']
 sess = expInfo['Session']
 
-# ===== PARAMETERS =====
-# Stimulus properties
-nDigits = 5  # length of stimuli
-stimDur = expInfo['Stimulus Duration (sec)']
-blackoutDur = expInfo['Blackout Duration (sec)']
+# Generate a random n-digit number
 
-# Task structure
-taskType = 3       # 1=IMT only,2=DMT only,3=IMT->DMT,4=DMT->IMT
-nBlocksPerTask = expInfo['Number of Blocks']
-blockDur = expInfo['Block Duration (sec)']
-restDur = expInfo['Rest Duration (sec)']
-
-# Probabilities (on per-trial basis)
-targetProb = 60
-catchProb = 0
-fillerProb = 40  # must sum to 100
-# Constraints
-minLatency = 0.1    # min RT accepted (s)
-dmtNDistractors = 3 # distractors after target in DMT
-minhDist = 2        # min digit differences for filler
-
-distractorString = '1'*nDigits  # e.g. '11111' or '12345'
-
-# ===== SETUP =====
-win = visual.Window(fullscr=False, color='white', units='norm')
-text = visual.TextStim(win, text='', height=0.1)
-clock = core.Clock()
-
-# Data storage
-results = []
-mouse = event.Mouse(win=win)
-
-# ===== UTILS =====
-def gen_random_number(prev=None, kind='filler'):
-    """Generate a random nDigits string based on kind."""
+def gen_num(prev=None, kind='filler'):
     if kind=='target' and prev:
         return prev
     if kind=='catch' and prev:
-        # change exactly one digit
         s=list(prev)
-        idx = random.randrange(nDigits)
-        digit = str((int(s[idx])+random.randint(1,9))%10)
-        s[idx] = digit
+        i=random.randrange(N_DIGITS)
+        s[i]=str((int(s[i])+random.randint(1,9))%10)
         return ''.join(s)
-    # filler: differ by >=minhDist
     while True:
-        s=''.join(str(random.randint(0,9)) for _ in range(nDigits))
-        if prev:
-            dist=sum(a!=b for a,b in zip(s,prev))
-            if dist>=minhDist and s!=distractorString:
-                return s
+        s=''.join(str(random.randint(0,9)) for _ in range(N_DIGITS))
+        if not prev or (sum(a!=b for a,b in zip(s,prev))>=2 and s!=DISTRACTOR):
+            return s
+
+# Run a block of trials
+
+def run_block(mode, label, trials, practice=False):
+    # Title
+    title = "Immediate Memory Task (IMT)" if mode=='IMT' else "Delayed Memory Task (DMT)"
+    text.text = title
+    text.draw(); win.flip(); core.wait(2)
+
+    # In DMT practice, demonstrate distractor
+    if practice and mode=='DMT':
+        text.text = f"Practice DMT uses distractor."
+        text.draw(); win.flip(); core.wait(3)
+
+    prev = gen_num(None, 'filler')
+    for t in range(1, trials+1):
+        r=random.uniform(0,100)
+        if r < TARGET_PROB:
+            stim, kind = prev, 'target'
+        elif r < TARGET_PROB + CATCH_PROB:
+            stim, kind = gen_num(prev, 'catch'), 'catch'
         else:
-            if s!=distractorString:
-                return s
+            stim, kind = gen_num(prev, 'filler'), 'filler'
 
+        # show previous stimulus
+        text.text = prev; text.draw(); win.flip(); core.wait(stimDur)
+        win.flip(); core.wait(BLACKOUT)
 
-def run_block(block_mode, block_idx):
-    """
-    Run one block:
-    block_mode: 'IMT' or 'DMT'
-    """
-    nTrials = int(blockDur/(stimDur+blackoutDur))
-    # initialize first stimulus
-    prev = gen_random_number(None,'filler')
-    clock.reset()
-    startTime = core.getTime()
-    results.append({'participant':pid,'session':sess,'block':block_idx,
-                    'mode':block_mode,'trial':0,'stim':prev,
-                    'resp':False,'correct':False,'rt':None})
-    trial_count = 1
-    next_distractors = 0
-    while core.getTime() - startTime < blockDur:
-        # determine trial type
-        if block_mode=='DMT' and next_distractors>0:
-            stim = distractorString
-            kind = 'distractor'
-            next_distractors -= 1
+        # DMT distractors for target
+        if mode=='DMT' and kind=='target':
+            for _ in range(DMT_DISTRACTORS):
+                text.text = DISTRACTOR; text.draw(); win.flip(); core.wait(stimDur)
+                win.flip(); core.wait(BLACKOUT)
+
+        # show current stimulus
+        text.text = stim; text.draw(); win.flip(); core.wait(stimDur)
+        win.flip(); core.wait(BLACKOUT)
+
+        # response prompt with timeout
+        text.text = "Press 'S' if same, 'D' if different"
+        text.draw(); win.flip()
+        clock.reset()
+        keys = event.waitKeys(maxWait=RESPONSE_TIMEOUT, keyList=['s','d'])
+        if keys:
+            key = keys[0]; rt = clock.getTime(); no_response=False
         else:
-            r = random.uniform(0,100)
-            if r<targetProb and prev is not None:
-                stim = prev; kind='target';
-                if block_mode=='DMT':
-                    next_distractors = dmtNDistractors
-            elif r<targetProb+catchProb:
-                stim = gen_random_number(prev,'catch'); kind='catch'
-            else:
-                stim = gen_random_number(prev,'filler'); kind='filler'
-        # present stimulus
-        text.text = stim; text.draw(); win.flip()
-        clock.reset(); responded=False; rt=None
-        while clock.getTime() < stimDur:
-            buttons = mouse.getPressed()
-            if any(buttons) and not responded:
-                responded=True; rt=clock.getTime()
-            core.wait(0.01)
-        # blackout
-        win.flip(); core.wait(blackoutDur)
-        # determine correctness
-        correct = False
-        if kind=='target' and responded and rt>=minLatency: correct=True
-        if kind!='target' and not responded: correct=True
-        results.append({'participant':pid,'session':sess,'block':block_idx,
-                        'mode':block_mode,'trial':trial_count,'stim':stim,
-                        'resp':responded,'correct':correct,'rt':rt})
-        prev = stim if kind!='distractor' else prev
-        trial_count+=1
-    # rest
-    text.text='Rest'; text.draw(); win.flip(); core.wait(restDur)
+            key = None; rt = None; no_response=True
+            text.text = "No response detected! Please respond on time."; text.draw(); win.flip(); core.wait(2)
 
-# ===== MAIN =====
-# Calculate total duration
-practice_blocks = 1  # One practice block
-test_blocks = nBlocksPerTask * (2 if taskType in [3,4] else 1)  # Number of test blocks
-total_blocks = practice_blocks + test_blocks
-total_time = total_blocks * (blockDur + restDur)  # Total time in seconds
-total_minutes = int(total_time / 60)
-total_seconds = int(total_time % 60)
+        win.flip(); core.wait(BLACKOUT)
 
-# Show instructions
+        if no_response:
+            correct=False
+        else:
+            correct = (kind=='target' and key=='s' and rt>=MIN_RT) or (kind!='target' and key=='d')
+
+        # record data
+        results.append({
+            'pid': pid,
+            'sess': sess,
+            'block': label,
+            'trial': t,
+            'prev': prev,
+            'curr': stim,
+            'kind': kind,
+            'key': key,
+            'correct': correct,
+            'rt': rt
+        })
+
+        # practice feedback
+        if practice:
+            feedback.text = 'Correct!' if correct else 'Wrong!'
+            feedback.draw(); win.flip(); core.wait(1)
+
+        prev = stim
+
+    # end-of-block pause (only main rounds)
+    if not practice:
+        text.text = f"{mode} block '{label}' complete"; text.draw(); win.flip(); core.wait(REST)
+
+# Instructions text
 if expInfo['Show Instructions']:
-    instructions = (
-        "Welcome to the Number Matching Game!\n\n"
-        "Here's how to play:\n"
-        "• You'll see two numbers\n"
-        "• If they match, press 'S'\n"
-        "• If they don't match, press 'L'\n"
-        "• Try to be quick but accurate\n\n"
-        "Ready to try? Press any key to start practice!"
+    text.text = (
+        "Number Matching Experiment:\n"
+        "You will be shown two numbers. Press 'S' if same, 'D' if different.\n"
+        "1. In IMT (Immediate Memory Task), match the second number with the first.\n"
+        "2. In DMT (Delayed Memory Task): sometimes there will be 3 'distractors numbers,'\n"
+        "sometimes not, please match the last number with the first one."
     )
+    text.draw(); win.flip(); event.waitKeys()
 
-    text.text = instructions
-    text.draw()
-    win.flip()
-    event.waitKeys()
-
-# practice session
+# Practice session
 if expInfo['Practice Trials']:
-    if taskType in (1,4):
-        run_block('IMT','P1')
-    if taskType in (2,3):
-        run_block('DMT','P1')
+    for i in range(1, nIMT_practice+1):
+        run_block('IMT', f'P-IMT-{i}', 1, practice=True)
+    for i in range(1, nDMT_practice+1):
+        run_block('DMT', f'P-DMT-{i}', 1, practice=True)
+    text.text = "Practice complete. Press any key to begin main experiment."; text.draw(); win.flip(); event.waitKeys()
 
-# test session
-order = []
-if taskType==1: order=['IMT']*nBlocksPerTask
-elif taskType==2: order=['DMT']*nBlocksPerTask
-elif taskType==3: order=['IMT','DMT']*nBlocksPerTask
-else: order=['DMT','IMT']*nBlocksPerTask
+# Main experiment grouped
+order = expInfo['Task Order']
+if order == 'IMT->DMT':
+    run_block('IMT', 'Main-IMT', nIMT_main)
+    text.text = "IMT main complete. Press any key for DMT."; text.draw(); win.flip(); event.waitKeys()
+    run_block('DMT', 'Main-DMT', nDMT_main)
+elif order == 'DMT->IMT':
+    run_block('DMT', 'Main-DMT', nDMT_main)
+    text.text = "DMT main complete. Press any key for IMT."; text.draw(); win.flip(); event.waitKeys()
+    run_block('IMT', 'Main-IMT', nIMT_main)
+elif order == 'IMT only':
+    run_block('IMT', 'Main-IMT', nIMT_main)
+elif order == 'DMT only':
+    run_block('DMT', 'Main-DMT', nDMT_main)
 
-text.text = (
-    "Now for the real game!\n\n"
-    "• Press 'S' for matching numbers\n"
-    "• Press 'L' for different numbers\n"
-    "• Try to be quick but accurate\n"
-    "• Take a deep breath and focus\n\n"
-    "Ready? Press any key to begin!"
-)
-text.draw()
-win.flip()
-event.waitKeys()
-
-for idx,mode in enumerate(order, start=1): run_block(mode,idx)
-
-# save data
-parent = os.path.join('..','data')
-if not os.path.exists(parent): os.makedirs(parent)
-fpath = os.path.join(parent, f"IMTDMT_{pid}_{sess}.csv")
-with open(fpath,'w',newline='') as f:
+# Save data to parent directory
+os.makedirs(os.path.join('..','data'), exist_ok=True)
+fname = f"imtdmt_{pid}_{sess}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+with open(os.path.join('..','data', fname), 'w', newline='') as f:
     writer = csv.DictWriter(f, fieldnames=results[0].keys())
     writer.writeheader(); writer.writerows(results)
 
-# end
-text.text = (
-    "All done! Thank you for playing!\n\n"
-    "You did a great job with the numbers!\n"
-    "You may now close the window."
-)
-text.draw()
-win.flip()
-core.wait(3.0)
-
-win.close()
-core.quit() 
+# Completion message
+text.text = "Thank you for participating!"; text.draw(); win.flip(); core.wait(3)
+win.close(); core.quit()

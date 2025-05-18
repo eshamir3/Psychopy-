@@ -28,7 +28,7 @@ tooltips = {
     'Input Timeout (sec)': 'Time allowed to type your response'
 }
 
-dlg = gui.DlgFromDict(expInfo, title="Consonant Trigram Task", tooltips=tooltips)
+dlg = gui.DlgFromDict(expInfo, title="Trigram Task testing Memory Recall")
 if not dlg.OK:
     core.quit()
 
