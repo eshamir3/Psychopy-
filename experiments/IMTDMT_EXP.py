@@ -4,23 +4,38 @@
 from psychopy import visual, core, event, gui
 import random, csv, os, datetime
 
-# === Participant Info and Parameters ===
+import argparse
+
+# === Load configured parameters from CLI flags ===
+parser = argparse.ArgumentParser()
+parser.add_argument('--participant_id',                 type=str, default='')
+parser.add_argument('--session',                        type=str, default='1')
+parser.add_argument('--show_instructions',              type=str, default='True')
+parser.add_argument('--practice_trials',                type=str, default='True')
+parser.add_argument('--number_of_imt_practice_trials',  type=str, default='2')
+parser.add_argument('--number_of_dmt_practice_trials',  type=str, default='2')
+parser.add_argument('--number_of_imt_experiment_trials',type=str, default='15')
+parser.add_argument('--number_of_dmt_experiment_trials',type=str, default='15')
+parser.add_argument('--stimulus_duration_s',            type=str, default='2.0')
+parser.add_argument('--task_order',                     type=str,
+                    choices=['IMT->DMT','DMT->IMT','IMT only','DMT only'],
+                    default='IMT->DMT')
+args = parser.parse_args()
+
+# Build expInfo dict from args (convert types as needed)
 expInfo = {
-    'Participant ID': '',
-    'Session': [str(i) for i in range(1,11)],  # 10 sessions
-    'Show Instructions': True,
-    'Practice Trials': True,
-    'Number of IMT Practice Trials': '2',
-    'Number of DMT Practice Trials': '2',
-    'Number of IMT Experiment Trials': '15',
-    'Number of DMT Experiment Trials': '15',
-    'Stimulus Duration (s)': '2.0',
-    'Task Order': ['IMT->DMT', 'DMT->IMT', 'IMT only', 'DMT only']
+    'Participant ID':             args.participant_id,
+    'Session':                    args.session,
+    'Show Instructions':          args.show_instructions.lower() in ('true','1','yes'),
+    'Practice Trials':            args.practice_trials.lower() in ('true','1','yes'),
+    'Number of IMT Practice Trials':  int(args.number_of_imt_practice_trials),
+    'Number of DMT Practice Trials':  int(args.number_of_dmt_practice_trials),
+    'Number of IMT Experiment Trials': int(args.number_of_imt_experiment_trials),
+    'Number of DMT Experiment Trials': int(args.number_of_dmt_experiment_trials),
+    'Stimulus Duration (s)':      float(args.stimulus_duration_s),
+    'Task Order':                 args.task_order
 }
 
-dlg = gui.DlgFromDict(expInfo, title="IMT/DMT Experiment")
-if not dlg.OK:
-    core.quit()
 
 # Fixed parameters (not exposed)
 BLACKOUT = 2.0          # seconds blank between stimuli

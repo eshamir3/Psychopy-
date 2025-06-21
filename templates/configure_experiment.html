@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configure {{ experiment.name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='manual_style.css') }}">
+
+  <style>
+    /* Container centered on page */
+    .config-container {
+      max-width: 480px;
+      margin: 50px auto;
+      padding: 24px;
+      background: #1e2530;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 1.15rem;
+      color: #fff;
+    }
+
+    /* Bigger heading, centered */
+    .config-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #f3f4f6;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Label shows name (description) */
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #f3f4f6;
+    }
+
+    /* Inputs fill width and have larger text */
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 1.1rem;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background: #2a2f3d;
+      color: #f3f4f6;
+    }
+
+    /* Show default clearly */
+    .form-group small {
+      display: block;
+      margin-top: 0.3rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .button-group-config {
+      display: flex;
+      gap: 12px;
+      margin-top: 1.5rem;
+    }
+
+    .btn-submit,
+    .btn-save-back {
+      flex: 1;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      color: #fff;
+    }
+    .btn-submit {
+      background: #2563eb;
+    }
+    .btn-submit:hover {
+      background: #1d4ed8;
+    }
+    .btn-save-back {
+      background: #6b7280;
+    }
+    .btn-save-back:hover {
+      background: #4b5563;
+    }
+  </style>
+</head>
+<body>
+  <div class="config-container">
+    <h2>Configure {{ experiment.name }}</h2>
+
+    <form id="config-form"
+          method="GET"
+          action="{{ url_for('run_experiment', experiment_name=experiment.name) }}">
+
+      {% for name, desc, default in content.parameters %}
+      <div class="form-group">
+        <label for="{{ name|lower|replace(' ', '_') }}">
+          {{ name }} (<em>{{ desc }}</em>)
+        </label>
+        <input
+          type="text"
+          id="{{ name|lower|replace(' ', '_') }}"
+          name="{{ name|lower|replace(' ', '_') }}"
+          value="{{ default }}"
+          data-default="{{ default }}"
+        >
+        <small>Default: <strong>{{ default }}</strong></small>
+      </div>
+      {% endfor %}
+
+      <div class="button-group-config">
+        <button type="submit" class="btn-submit">Run Experiment</button>
+        <button type="button"
+                class="btn-save-back"
+                onclick="window.location.href='{{ url_for('view_manual', experiment_name=experiment.name) }}'">
+          Save &amp; Go Back to Experiment Manual
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Persist tweaks in localStorage per experiment
+    document.addEventListener("DOMContentLoaded", () => {
+      const prefix = "{{ experiment.name|replace(' ', '_') }}_";
+      document.querySelectorAll("#config-form input").forEach(input => {
+        const key = prefix + input.name;
+        const saved = localStorage.getItem(key);
+        if (saved !== null) input.value = saved;
+        input.addEventListener("input", () => {
+          localStorage.setItem(key, input.value);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

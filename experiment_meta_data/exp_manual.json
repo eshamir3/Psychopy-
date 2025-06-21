@@ -1,0 +1,468 @@
+{
+  "SART Task": {
+    "overview": "This experiment is designed to measure cognitive processes related to sart task. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see a series of numbers appear on the screen",
+      "Press the spacebar for every number EXCEPT the number 3",
+      "If you see the number 3, do NOT press any key",
+      "Try to be both fast and accurate",
+      "Stay focused throughout the task"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Rapid Attention": {
+    "overview": "This experiment is designed to measure cognitive processes related to rapid attention. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see targets appear in different locations",
+      "Respond as quickly as possible when you see the target",
+      "Use the arrow keys to indicate the target's location",
+      "Maintain focus on the center of the screen",
+      "Try to be both fast and accurate"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Focused Blink": {
+    "overview": "This experiment is designed to measure cognitive processes related to focused blink. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see a rapid sequence of letters",
+      "Look for two specific target letters",
+      "Press the spacebar when you see both targets",
+      "Keep your eyes focused on the center",
+      "Try to catch all target pairs"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Cued Recall Task": {
+    "overview": "This experiment is designed to measure cognitive processes related to cued recall task. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see word pairs to remember",
+      "Study each pair carefully",
+      "Later, you'll see the first word of each pair",
+      "Type the word that was paired with it",
+      "Try to recall as many pairs as possible"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Make sure your keyboard is working properly for typing responses",
+      "Type your responses carefully and accurately"
+    ]
+  },
+  "Emotional Stroop": {
+    "overview": "This experiment is designed to measure cognitive processes related to emotional stroop. Follow the instructions carefully to ensure accurate results.",
+    "image": "images/stroop_example.png",
+    "caption": "Example of the emotional stroop task showing color-word interference",
+    "parameters": [
+      [
+        "Participant ID",
+        "Experimentee's unique identifier",
+        "test_subject"
+      ],
+      [
+        "Session",
+        "Current session number",
+        "1"
+      ],
+      [
+        "Show Instructions",
+        "Display task instructions",
+        "Yes"
+      ],
+      [
+        "Practice Trials",
+        "Run practice trials first",
+        "Yes"
+      ],
+      [
+        "Number of Trials",
+        "Total trials to complete",
+        "50"
+      ],
+      [
+        "Stimulus Duration (sec)",
+        "Time to view each word",
+        "1.5"
+      ],
+      [
+        "Inter-trial Interval (sec)",
+        "Time between trials",
+        "1.0"
+      ]
+    ],
+    "instructions": [
+      "You will see words appear on the screen in different colors",
+      "Your task is to identify the COLOR of the word, not read the word itself",
+      "Press the corresponding color key as quickly as possible",
+      "Ignore the meaning of the word and focus only on its color",
+      "Try to be both fast and accurate"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Task Switching": {
+    "overview": "This experiment is designed to measure cognitive processes related to task switching. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will alternate between two different tasks",
+      "Follow the task cue shown on screen",
+      "Respond according to the current task rules",
+      "Be ready to switch tasks quickly",
+      "Try to maintain accuracy while switching"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Stay focused on the current task",
+      "Don't let previous trials affect your current response"
+    ]
+  },
+  "Executive Conflict": {
+    "overview": "This experiment is designed to measure cognitive processes related to executive conflict. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see conflicting information on screen",
+      "Follow the main task instruction",
+      "Ignore the distracting information",
+      "Respond as quickly and accurately as possible",
+      "Stay focused on the primary task"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Stay focused on the current task",
+      "Don't let previous trials affect your current response"
+    ]
+  },
+  "Reaction Speed": {
+    "overview": "This experiment is designed to measure cognitive processes related to reaction speed. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see a stimulus appear on screen",
+      "Press the spacebar as quickly as possible when you see it",
+      "Wait for the stimulus before responding",
+      "Try to be as fast as possible",
+      "But don't press before the stimulus appears"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Keep your hands ready on the response keys",
+      "Respond as quickly as possible without making mistakes"
+    ]
+  },
+  "Visual Search": {
+    "overview": "This experiment is designed to measure cognitive processes related to visual search. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see a display of items",
+      "Look for the target item among distractors",
+      "Press the spacebar when you find the target",
+      "Search systematically",
+      "Try to be both fast and accurate"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Motor Response": {
+    "overview": "This experiment is designed to measure cognitive processes related to motor response. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will see different movement cues",
+      "Respond with the corresponding movement",
+      "Use the arrow keys for direction",
+      "Respond as quickly as possible",
+      "Try to be accurate with your movements"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Keep your hands ready on the response keys",
+      "Respond as quickly as possible without making mistakes"
+    ]
+  },
+  "Decision Risk": {
+    "overview": "This experiment is designed to measure cognitive processes related to decision risk. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will make choices between different options",
+      "Each option has different probabilities and outcomes",
+      "Consider the risks and rewards carefully",
+      "Make your choice within the time limit",
+      "There are no right or wrong answers"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Strategy Shift": {
+    "overview": "This experiment is designed to measure cognitive processes related to strategy shift. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [],
+    "instructions": [
+      "You will learn a pattern of responses",
+      "The pattern will change during the task",
+      "Adapt your responses to the new pattern",
+      "Try to learn the new pattern quickly",
+      "Stay flexible in your approach"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Value Choice": {
+    "overview": "This experiment is designed to measure cognitive processes related to value choice. Follow the instructions carefully to ensure accurate results.",
+    "image": "images/value_choice_example.png",
+    "caption": "Example of the value choice task interface",
+    "parameters": [
+      [
+        "Participant ID",
+        "Experimentee's unique identifier",
+        "test_subject"
+      ],
+      [
+        "Session",
+        "Current session number",
+        "1"
+      ],
+      [
+        "Show Instructions",
+        "Display task instructions",
+        "Yes"
+      ],
+      [
+        "Practice Trials",
+        "Run practice trials first",
+        "Yes"
+      ],
+      [
+        "Trial Duration (sec)",
+        "Time to make each choice",
+        "5.0"
+      ],
+      [
+        "Feedback Duration (sec)",
+        "Time to view feedback",
+        "2.0"
+      ],
+      [
+        "Randomize Position",
+        "Randomize option positions",
+        "Yes"
+      ],
+      [
+        "Number of Trials",
+        "Total trials to complete",
+        "5"
+      ]
+    ],
+    "instructions": [
+      "You will see two value-based options displayed as cards",
+      "Click on the card that represents your preferred option",
+      "Each choice must be made within the set time limit",
+      "Feedback will show your choice after each trial",
+      "There are no right or wrong answers \u2013 choose what feels right"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  },
+  "Trigram": {
+    "overview": "This experiment is designed to measure cognitive processes related to trigram. Follow the instructions carefully to ensure accurate results.",
+    "image": "images/trigram_example.png",
+    "caption": "Example of the trigram task showing three letters to remember",
+    "parameters": [
+      [
+        "Participant ID",
+        "Experimentee's unique identifier",
+        "test_subject"
+      ],
+      [
+        "Session",
+        "Current session number",
+        "1"
+      ],
+      [
+        "Show Instructions",
+        "Display task instructions",
+        "Yes"
+      ],
+      [
+        "Practice Trials",
+        "Run practice trials first",
+        "Yes"
+      ]
+    ],
+    "instructions": [
+      "You will see three random letters appear (e.g., DKT)",
+      "Remember them in the correct order",
+      "Then, a number will be shown (e.g., 300)",
+      "You must count backwards by the specified amount (e.g., by 3s) in your head",
+      "After the countdown, you'll be prompted to TYPE the letters you saw",
+      "Type the letters exactly as you saw them and press ENTER",
+      "You have a limited time to type your response",
+      "Try to be accurate and respond within the time limit"
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible",
+      "Make sure your keyboard is working properly for typing responses",
+      "Type the letters in the exact order you saw them"
+    ]
+  },
+  "Immediate and Delayed Memory Task": {
+    "overview": "This experiment is designed to measure cognitive processes related to immediate and delayed memory task. Follow the instructions carefully to ensure accurate results.",
+    "image": null,
+    "caption": null,
+    "parameters": [
+      [
+        "Participant ID",
+        "Experimentee's unique identifier",
+        "test_subject"
+      ],
+      [
+        "Session",
+        "Current session number (1\u201310)",
+        "1"
+      ],
+      [
+        "Show Instructions",
+        "Display task instructions before starting",
+        "Yes"
+      ],
+      [
+        "Practice Trials",
+        "Run IMT and DMT practice rounds",
+        "Yes"
+      ],
+      [
+        "Number of IMT Practice Trials",
+        "How many IMT practice trials to run",
+        "2"
+      ],
+      [
+        "Number of DMT Practice Trials",
+        "How many DMT practice trials to run",
+        "2"
+      ],
+      [
+        "Number of IMT Experiment Trials",
+        "Trials in the main IMT block",
+        "15"
+      ],
+      [
+        "Number of DMT Experiment Trials",
+        "Trials in the main DMT block",
+        "15"
+      ],
+      [
+        "Stimulus Duration (s)",
+        "Time each number is displayed",
+        "2.0"
+      ],
+      [
+        "Task Order",
+        "Sequence of IMT and DMT blocks",
+        "IMT->DMT, choose from ['IMT->DMT','DMT->IMT','IMT only','DMT only']"
+      ]
+    ],
+    "instructions": [
+      "You will see a 5-digit number appear on the screen.",
+      "In IMT (Immediate Memory Task), the next number appears immediately.",
+      "In DMT (Delayed Memory Task), if the numbers match, you will first see three identical distractor numbers (\u201c12345\u201d) before the second number appears.",
+      "After the second number, press S if it\u2019s the same as the first, or D if it\u2019s different.",
+      "You have up to 5 seconds to respond each trial; if you do not respond in time, you will see a warning.",
+      "Practice rounds for both IMT and DMT are provided before the main experiment begins.",
+      "Your accuracy and reaction time are recorded on every trial."
+    ],
+    "notes": [
+      "Find a quiet environment to complete the experiment",
+      "Ensure your computer is properly set up and calibrated",
+      "Take breaks if needed",
+      "Report any technical issues immediately",
+      "Complete the experiment in one session if possible"
+    ]
+  }
+}

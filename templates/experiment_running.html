@@ -1,15 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Running {{ experiment_name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Running {{ experiment_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body.experiment-running {
+      background: #f3f4f6;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .running-container {
+      background: #fff;
+      padding: 2rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+    }
+    .running-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+    .running-container p {
+      font-size: 1.1rem;
+      color: #475569;
+      margin-bottom: 1.5rem;
+    }
+    .running-container a.return-home {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .running-container a.return-home:hover {
+      background: #1d4ed8;
+    }
+  </style>
 </head>
 <body class="experiment-running">
-    <div class="running-container">
-        <h1>{{ experiment_name }} is now running!</h1>
-        <p>Good luck with the experiment!</p>
-        <a href="/" class="return-home">← Return Home</a>
-    </div>
+  <div class="running-container">
+    <h1>{{ experiment_name }} is now running!</h1>
+    <p>
+      A PsychoPy experiment window will open on-screen for your participant.<br>
+      From this point on, the participant takes over.<br>
+      Once it finishes, the results will be written out to a CSV file in the experiment folder.
+    </p>
+    <a href="{{ url_for('index') }}" class="return-home">← Return Home</a>
+  </div>
 </body>
 </html>
