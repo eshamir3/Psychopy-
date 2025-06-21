@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Experiment Launcher</title>
+    <title>Psychology Experiments Runner - Experimenter View</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -22,8 +22,18 @@
 
 <div class="main">
     <div class="header-section">
-        <h1>Welcome to the Experiment Launcher</h1>
-        <p class="subtitle">Explore cognitive and behavioral science experiments built for academic research and internal studies.</p>
+        <h1>Psychology Experiments Runner - <span class="highlight">Experimenter View</span></h1>
+        <p class="subtitle">From this page you could launch multiple pre-built experiments to collect data for your academic research. <br>
+        <br>
+        <span class="highlight">The steps to configure and run the experiments are</span>:
+        </p>
+        <div class="highlight-box">
+            <ol>
+                <li>Read the experiment manual <code>View Manual</code></li>
+                <li>Configure the experiment settings, such as participant ID, session number, etc. in <code>Configure Experiment</code></li>
+                <li>Click <code>Run Experiment</code> to start the experiment.</li>
+            </ol>
+        </div>
         <a class="learn-button" href="{{ url_for('learn_more') }}">Learn More</a>
     </div>
 
@@ -35,8 +45,9 @@
                 <h3 class="experiment-title">{{ experiment.name }}</h3>
                 <p class="description">{{ experiment.description }}</p>
                 <div class="button-group">
-                    <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">Run Experiment</a>
                     <a href="{{ url_for('view_manual', experiment_name=experiment.name) }}" class="manual-button">View Manual</a>
+                    <a href="{{ url_for('configure_experiment', experiment_name=experiment.name) }}" class="configure-button">Configure Experiment</a>
+                    <a href="{{ url_for('run_experiment', experiment_name=experiment.name) }}" class="experiment-button">Run Experiment</a> 
                 </div>
             </div>
             {% endfor %}

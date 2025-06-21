@@ -80,6 +80,22 @@ h1 {
     background-color: #7f90f0;
 }
 
+.configure-button {
+    display: inline-block;
+    /* margin-bottom: 40px; */
+    padding: 10px 20px;
+    background-color: #5a6ee5;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.learn-button:hover {
+    background-color: #7f90f0;
+}
+
+
 h2 {
     margin-top: 80px;
     font-size: 32px;
@@ -277,4 +293,30 @@ h2 {
 
 .parameter-table tr:hover {
     background-color: #2a3340;
+}
+
+.highlight-box {
+    background-color: inherit; /* Same as the surrounding section */
+    border: 2px solid orange; /* Soft gray border */
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Optional soft shadow */
+    
+}
+
+.highlight-box ol {
+    margin: 0;
+    padding-left: 20px; /* Indent for list items */
+    text-align: left;
+}
+
+.header-section .highlight {
+    color: orange; /* Use your preferred highlight color */
+    font-weight: bold; /* Optional: make it stand out more */
+}
+
+.header-section .subtitle {
+    text-align: left;
 }

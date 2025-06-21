@@ -69,7 +69,38 @@ def run_experiment(experiment_name):
     except Exception as e:
         return render_template('error.html', message=f"Error launching experiment: {str(e)}")
 
+@app.route('/configure/<experiment_name>')
+def configure_experiment(experiment_name):
+    return render_template('configure_experiment.html', experiment_name=experiment_name)
+
+    # Match experiment
+    experiment = next(
+        (exp for exp in experiments if exp['name'].strip().lower() == experiment_name.strip().lower()),
+        None
+    )
+    if not experiment:
+        return render_template('error.html', message=f"Experiment '{experiment_name}' not found.")
+
+    # Resolve full path
+    relative_path = experiment.get('path')
+    if not relative_path:
+        return render_template('not_ready.html', exp_name=experiment_name)
+
+    abs_path = os.path.abspath(relative_path)
+    if not os.path.exists(abs_path):
+        return render_template('error.html', message=f"File not found at: {abs_path}")
+
+    # Open PsychoPy configuration
+    try:
+        subprocess.Popen(
+            [PSYCHOPY_PYTHON_PATH, abs_path],
+            cwd=os.path.dirname(abs_path),
+            creationflags=subprocess.CREATE_NEW_CONSOLE if sys.platform == 'win32' else 0
+        )
+        return render_template('experiment_configuring.html', experiment_name=experiment_name)
     
+    except Exception as e:
+        return render_template('error.html', message=f"Error launching configuration: {str(e)}")
 
 @app.route('/manual/<experiment_name>')
 def view_manual(experiment_name):
