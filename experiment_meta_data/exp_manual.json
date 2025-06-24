@@ -3,7 +3,56 @@
     "overview": "This experiment is designed to measure cognitive processes related to sart task. Follow the instructions carefully to ensure accurate results.",
     "image": null,
     "caption": null,
-    "parameters": [],
+    "parameters": [
+      [
+        "Participant ID",
+        "Experimentee's unique identifier",
+        "test_subject",
+        "string"
+      ],
+      [
+        "Session",
+        "Current session number",
+        "1",
+        "string"
+      ],
+      [
+        "Show Instructions",
+        "Display task instructions before starting",
+        "Yes",
+        ["Yes", "No"]
+      ],
+      [
+        "Practice Trials",
+        "Run practice trials before the main task",
+        "Yes",
+        ["Yes", "No"]
+      ],
+      [
+        "Number of Practice Trials",
+        "Number of practice trials to complete",
+        "5",
+        "positive integer"
+      ],
+      [
+        "Number of Main Trials",
+        "Number of main experiment trials",
+        "90",
+        "positive integer"
+      ],
+      [
+        "Stimulus Duration (sec)",
+        "How long each number is displayed",
+        "0.35",
+        "positive number"
+      ],
+      [
+        "Break Duration (sec)",
+        "Time between numbers",
+        "0.5",
+        "positive number"
+      ]
+    ],
     "instructions": [
       "You will see a series of numbers appear on the screen",
       "Press the spacebar for every number EXCEPT the number 3",
@@ -94,7 +143,7 @@
       [
         "Session",
         "Current session number",
-        "1"
+        "positive integer"
       ],
       [
         "Show Instructions",
@@ -293,42 +342,50 @@
       [
         "Participant ID",
         "Experimentee's unique identifier",
-        "test_subject"
+        "test_subject",
+        "string"
       ],
       [
         "Session",
         "Current session number",
-        "1"
+        "1",
+        "positive integer"
       ],
       [
         "Show Instructions",
         "Display task instructions",
-        "Yes"
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Practice Trials",
         "Run practice trials first",
-        "Yes"
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Trial Duration (sec)",
         "Time to make each choice",
-        "5.0"
+        "5.0",
+        "positive number"
       ],
       [
         "Feedback Duration (sec)",
         "Time to view feedback",
-        "2.0"
+        "2.0",
+        "positive number"
       ],
       [
         "Randomize Position",
         "Randomize option positions",
-        "Yes"
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Number of Trials",
         "Total trials to complete",
-        "5"
+        "5",
+        "positive integer"
       ]
     ],
     "instructions": [
@@ -354,22 +411,56 @@
       [
         "Participant ID",
         "Experimentee's unique identifier",
-        "test_subject"
+        "test_subject",
+        "name, string"
       ],
       [
         "Session",
         "Current session number",
-        "1"
+        "1",
+        "positive integer"
       ],
       [
         "Show Instructions",
-        "Display task instructions",
-        "Yes"
+        "Display task instructions before starting",
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Practice Trials",
-        "Run practice trials first",
-        "Yes"
+        "Run practice trials before the main task",
+        "Yes",
+        ["Yes", "No"]
+      ],
+      [
+        "Number of Practice Trials",
+        "Number of practice trials to complete",
+        "3",
+        "positive integer"
+      ],
+      [
+        "Number of Main Trials",
+        "Number of main experiment trials",
+        "6",
+        "positive integer"
+      ],
+      [
+        "Trigram Duration (sec)",
+        "Time to view the three letters",
+        "1.5",
+        "positive number"
+      ],
+      [
+        "Countdown Step",
+        "Number to count down by (e.g., 3 for 300, 297, 294...)",
+        "3",
+        "positive integer"
+      ],
+      [
+        "Input Timeout (sec)",
+        "Time allowed to type your response",
+        "10.0",
+        "positive number"
       ]
     ],
     "instructions": [
@@ -400,52 +491,62 @@
       [
         "Participant ID",
         "Experimentee's unique identifier",
-        "test_subject"
+        "test_subject",
+        "Name, string"
       ],
       [
         "Session",
         "Current session number (1\u201310)",
-        "1"
+        "1",
+        ""
       ],
       [
         "Show Instructions",
         "Display task instructions before starting",
-        "Yes"
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Practice Trials",
         "Run IMT and DMT practice rounds",
-        "Yes"
+        "Yes",
+        ["Yes", "No"]
       ],
       [
         "Number of IMT Practice Trials",
         "How many IMT practice trials to run",
-        "2"
+        "2",
+        "positive integer"
       ],
       [
         "Number of DMT Practice Trials",
         "How many DMT practice trials to run",
-        "2"
+        "2",
+        "positive integer"
       ],
       [
         "Number of IMT Experiment Trials",
         "Trials in the main IMT block",
-        "15"
+        "15",
+        "positive integer"
       ],
       [
         "Number of DMT Experiment Trials",
         "Trials in the main DMT block",
-        "15"
+        "15",
+        "positive integer"
       ],
       [
         "Stimulus Duration (s)",
         "Time each number is displayed",
-        "2.0"
+        "2.0",
+        "positive number"
       ],
       [
         "Task Order",
         "Sequence of IMT and DMT blocks",
-        "IMT->DMT, choose from ['IMT->DMT','DMT->IMT','IMT only','DMT only']"
+        "IMT->DMT",
+        ["IMT->DMT", "DMT->IMT", "IMT only", "DMT only"]
       ]
     ],
     "instructions": [

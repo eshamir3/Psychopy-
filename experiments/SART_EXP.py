@@ -1,28 +1,33 @@
-# --- SART Experiment (Modified for Faster Practice) ---
-from psychopy import visual, core, event, gui, data
+import argparse
+from psychopy import visual, core, event, data
 import random
 import os
 
-# --- 1. Participant Info ---
+# --- 1. Parse command-line arguments ---
+parser = argparse.ArgumentParser()
+parser.add_argument('--participant_id', type=str, default='test_subject')
+parser.add_argument('--session', type=str, default='1')
+parser.add_argument('--show_instructions', type=str, default='True')
+parser.add_argument('--practice_trials', type=str, default='True')
+parser.add_argument('--number_of_practice_trials', type=str, default='5')
+parser.add_argument('--number_of_main_trials', type=str, default='90')
+parser.add_argument('--stimulus_duration_sec', type=str, default='0.35')
+parser.add_argument('--break_duration_sec', type=str, default='0.5')
+args, unknown = parser.parse_known_args()
+
+# --- 2. Build expInfo dict from args ---
 expInfo = {
-    'Participant ID': '',
-    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  # Dropdown menu
-    'Show Instructions': True,  # Toggle for instructions
-    'Practice Trials': True,    # Toggle for practice
-    'Number of Practice Trials': 5,  # How many practice trials
-    'Number of Main Trials': 90,     # How many main trials
-    'Stimulus Duration (sec)': 0.35, # How long each number shows
-    'Break Duration (sec)': 0.5      # Time between numbers
+    'Participant ID': args.participant_id,
+    'Session': args.session,
+    'Show Instructions': args.show_instructions.lower() in ('true', '1', 'yes'),
+    'Practice Trials': args.practice_trials.lower() in ('true', '1', 'yes'),
+    'Number of Practice Trials': int(args.number_of_practice_trials),
+    'Number of Main Trials': int(args.number_of_main_trials),
+    'Stimulus Duration (sec)': float(args.stimulus_duration_sec),
+    'Break Duration (sec)': float(args.break_duration_sec)
 }
 
-dlg = gui.DlgFromDict(expInfo, title="SART Experiment", 
-                     order=['Participant ID', 'Session', 'Show Instructions', 'Practice Trials', 
-                           'Number of Practice Trials', 'Number of Main Trials', 
-                           'Stimulus Duration (sec)', 'Break Duration (sec)'])
-if not dlg.OK:
-    core.quit()
-
-# --- 2. Data file setup ---
+# --- 3. Data file setup ---
 try:
     # Get the absolute path to the data directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -39,21 +44,21 @@ except Exception as e:
     print(f"Error setting up data directory: {str(e)}")
     core.quit()
 
-# --- 3. Experiment Parameters ---
+# --- 4. Experiment Parameters ---
 stim_duration = expInfo['Stimulus Duration (sec)']
 isi_duration = expInfo['Break Duration (sec)']
 target_number = '3'    # number to withhold response
 practice_trials = expInfo['Number of Practice Trials']
 main_trials = expInfo['Number of Main Trials']
 
-# --- 4. Create Window and Stimuli ---
+# --- 5. Create Window and Stimuli ---
 win = visual.Window(fullscr=False, color='black')
 fixation = visual.TextStim(win, text='+', color='white')
 digit_stim = visual.TextStim(win, text='', color='white', height=0.2)
 instruction_text = visual.TextStim(win, text='', color='white', wrapWidth=1.5)
 feedback_text = visual.TextStim(win, text='', color='white', height=0.1)
 
-# --- 5. Show Instructions ---
+# --- 6. Show Instructions ---
 if expInfo['Show Instructions']:
     instructions = (
         "Welcome to the Number Game!\n\n"
@@ -72,7 +77,7 @@ if expInfo['Show Instructions']:
     win.flip()
     event.waitKeys()
 
-# --- 6. Practice Trials ---
+# --- 7. Practice Trials ---
 if expInfo['Practice Trials']:
     digits = [str(i) for i in range(10)]
     practice_list = random.choices(digits, k=practice_trials)
@@ -111,7 +116,7 @@ if expInfo['Practice Trials']:
         if any(k[0] == 'escape' for k in keys):
             core.quit()
 
-# --- 7. Start Main Experiment Instructions ---
+# --- 8. Start Main Experiment Instructions ---
 instruction_text.text = (
     "Now for the real game!\n\n"
     "• Press SPACEBAR for all numbers except 3\n"
@@ -123,7 +128,7 @@ instruction_text.draw()
 win.flip()
 event.waitKeys()
 
-# --- 8. Main Trials (same speed) ---
+# --- 9. Main Trials (same speed) ---
 main_list = random.choices(digits, k=main_trials)
 
 for trial_num, digit in enumerate(main_list):
@@ -159,7 +164,7 @@ for trial_num, digit in enumerate(main_list):
     if any(k[0] == 'escape' for k in keys):
         core.quit()
 
-# --- 9. Goodbye Screen ---
+# --- 10. Goodbye Screen ---
 instruction_text.text = (
     "All done! Thank you for playing!\n\n"
     "You did a great job with the numbers!\n"
@@ -169,7 +174,7 @@ instruction_text.draw()
 win.flip()
 core.wait(3.0)
 
-# --- 10. Save and Exit ---
+# --- 11. Save and Exit ---
 try:
     thisExp.saveAsWideText(filename + '.csv')
     # Show success message

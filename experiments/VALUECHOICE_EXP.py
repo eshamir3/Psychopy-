@@ -2,32 +2,33 @@
 from psychopy import visual, core, event, gui, data  
 import random  
 import os  
+import argparse
 
-# --- 1. Participant Info and Parameters ---  
-expInfo = {  
-    'Participant ID': '',  
-    'Session': ['1','2','3','4','5','6','7','8','9','10'],  
-    'Show Instructions': True,  
-    'Practice Trials': True,  
-    'Trial Duration (sec)': 5.0,  
-    'Feedback Duration (sec)': 2.0,  
-    'Randomize Position': True,  
-    '# of Trials': ['5','10','15']  
-}  
-dlg = gui.DlgFromDict(  
-    expInfo, title="Value Choice Experiment",  
-    order=[  
-        'Participant ID','Session','Show Instructions','Practice Trials',  
-        'Trial Duration (sec)','Feedback Duration (sec)',  
-        'Randomize Position','# of Trials'  
-    ]  
-)  
-if not dlg.OK:  
-    core.quit()  
+# --- 1. Parse command-line arguments (for web/app integration) ---
+parser = argparse.ArgumentParser()
+parser.add_argument('--participant_id', type=str, default='')
+parser.add_argument('--session', type=str, default='1')
+parser.add_argument('--show_instructions', type=str, default='True')
+parser.add_argument('--practice_trials', type=str, default='True')
+parser.add_argument('--trial_duration_sec', type=str, default='5.0')
+parser.add_argument('--feedback_duration_sec', type=str, default='2.0')
+parser.add_argument('--randomize_position', type=str, default='True')
+parser.add_argument('--number_of_trials', type=str, default='5')
+args, unknown = parser.parse_known_args()
 
-num_trials = int(expInfo['# of Trials'])  
+# --- 2. Build expInfo dict from args (convert types as needed) ---
+expInfo = {
+    'Participant ID': args.participant_id,
+    'Session': args.session,
+    'Show Instructions': args.show_instructions.lower() in ('true', '1', 'yes'),
+    'Practice Trials': args.practice_trials.lower() in ('true', '1', 'yes'),
+    'Trial Duration (sec)': float(args.trial_duration_sec),
+    'Feedback Duration (sec)': float(args.feedback_duration_sec),
+    'Randomize Position': args.randomize_position.lower() in ('true', '1', 'yes'),
+    'Number of Trials': int(args.number_of_trials)
+}
 
-# --- 2. Data file setup ---  
+# --- 3. Data file setup ---  
 try:  
     current_dir = os.path.dirname(os.path.abspath(__file__))  
     parent_dir  = os.path.dirname(current_dir)  
@@ -42,7 +43,7 @@ except Exception as e:
     print(f"Error setting up data directory: {e}")  
     core.quit()  
 
-# --- 3. Create Window and Stimuli ---  
+# --- 4. Create Window and Stimuli ---  
 win = visual.Window(size=(1024, 768), color="white", units="pix", fullscr=False)  
 instruction_text = visual.TextStim(win, text='', color='black', wrapWidth=800)  
 feedback_text    = visual.TextStim(win, text='', color='green', wrapWidth=800)  
@@ -57,7 +58,7 @@ prompt = visual.TextStim(
     height=24  
 )  
 
-# --- 4. Define stimulus pairs ---  
+# --- 5. Define stimulus pairs ---  
 stim_pairs = [  
     ("Receive $10 today", "Receive $15 in one week"),  
     ("Work 2 hours for $20", "Work 1 hour for $8"),  
@@ -76,9 +77,10 @@ stim_pairs = [
     ("Spend time offline", "Browse social media")  
 ]  
 random.shuffle(stim_pairs)  
-stim_pairs = stim_pairs[:num_trials]  # Trim to requested trial count  
+number_of_trials = expInfo['Number of Trials']
+stim_pairs = stim_pairs[:number_of_trials]  # Trim to requested trial count  
 
-# --- 5. Card and Button setup ---  
+# --- 6. Card and Button setup ---  
 card_width, card_height = 500, 300  
 left_card  = visual.Rect(  
     win, width=card_width, height=card_height, pos=(-300, 0),  
@@ -125,7 +127,7 @@ def get_card_clicked():
             return 'right', timer.getTime()  
     return 'none', float(expInfo['Trial Duration (sec)'])  
 
-# --- 6. Numbered-step Instructions ---  
+# --- 7. Numbered-step Instructions ---  
 if expInfo['Show Instructions']:  
     instruction_text.text = (  
         "Welcome to the Value Choice Experiment!\n\n"  
@@ -138,7 +140,7 @@ if expInfo['Show Instructions']:
     win.flip()  
     event.waitKeys(keyList=['space'])  
 
-# --- 7. Practice Trial ---  
+# --- 8. Practice Trial ---  
 if expInfo['Practice Trials']:  
     practice_pair = ("Receive $10 today", "Receive $15 in one week")  
     instruction_text.text = "Let's practice! Click the button under the card you prefer."  
@@ -158,10 +160,10 @@ if expInfo['Practice Trials']:
     win.flip()  
     event.waitKeys(keyList=['space'])  
 
-# --- 8. Ready Message ---  
+# --- 9. Ready Message ---  
 instruction_text.text = (  
     f"Now it's time for the real choices.\n\n"  
-    f"There will be {num_trials} trials.\n"  
+    f"There will be {number_of_trials} trials.\n"  
     "Take your time, and click on the button under your preferred option.\n\n"  
     "Press SPACE to begin."  
 )  
@@ -169,7 +171,7 @@ instruction_text.draw()
 win.flip()  
 event.waitKeys(keyList=['space'])  
 
-# --- 9. Main Trials ---  
+# --- 10. Main Trials ---  
 for i, (stim1, stim2) in enumerate(stim_pairs):  
     # randomize left/right if requested  
     if expInfo['Randomize Position'] and random.choice([True, False]):  
@@ -205,7 +207,7 @@ for i, (stim1, stim2) in enumerate(stim_pairs):
     win.flip()  
     core.wait(float(expInfo['Feedback Duration (sec)']))  
 
-# --- 10. Goodbye & Save ---  
+# --- 11. Goodbye & Save ---  
 instruction_text.text = (  
     "Thank you! Your responses have been recorded.\n\n"  
     "You may now close the window."  
@@ -223,4 +225,4 @@ except Exception as e:
     event.waitKeys()  
 
 win.close()  
-core.quit()  
+core.quit()

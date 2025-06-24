@@ -1,36 +1,33 @@
 # --- Consonant Trigram Task (Complete Version) ---
 from psychopy import visual, core, event, gui
 import random, string, csv, os
+import argparse
 
-# --- Get Experiment Parameters ---
+# --- Parse command-line arguments ---
+parser = argparse.ArgumentParser()
+parser.add_argument('--participant_id', type=str, default='test_subject')
+parser.add_argument('--session', type=str, default='1')
+parser.add_argument('--show_instructions', type=str, default='True')
+parser.add_argument('--practice_trials', type=str, default='True')
+parser.add_argument('--number_of_practice_trials', type=str, default='3')
+parser.add_argument('--number_of_main_trials', type=str, default='6')
+parser.add_argument('--trigram_duration_sec', type=str, default='1.5')
+parser.add_argument('--countdown_step', type=str, default='3')
+parser.add_argument('--input_timeout_sec', type=str, default='10.0')
+args, unknown = parser.parse_known_args()
+
+# --- Build expInfo dict from args ---
 expInfo = {
-    'Participant ID': '',
-    'Session': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    'Show Instructions': True,
-    'Practice Trials': True,
-    'Number of Practice Trials': 3,
-    'Number of Main Trials': 6,
-    'Trigram Duration (sec)': 1.5,
-    'Countdown Step': 3,
-    'Input Timeout (sec)': 10.0
+    'Participant ID': args.participant_id,
+    'Session': args.session,
+    'Show Instructions': args.show_instructions.lower() in ('true', '1', 'yes'),
+    'Practice Trials': args.practice_trials.lower() in ('true', '1', 'yes'),
+    'Number of Practice Trials': int(args.number_of_practice_trials),
+    'Number of Main Trials': int(args.number_of_main_trials),
+    'Trigram Duration (sec)': float(args.trigram_duration_sec),
+    'Countdown Step': int(args.countdown_step),
+    'Input Timeout (sec)': float(args.input_timeout_sec)
 }
-
-# Add tooltips for clearer parameter descriptions
-tooltips = {
-    'Participant ID': 'Enter your unique identifier (required)',
-    'Session': 'Select your current session number',
-    'Show Instructions': 'Display task instructions before starting',
-    'Practice Trials': 'Run practice trials before the main task',
-    'Number of Practice Trials': 'Number of practice trials to complete',
-    'Number of Main Trials': 'Number of main experiment trials',
-    'Trigram Duration (sec)': 'Time to view the three letters',
-    'Countdown Step': 'Number to count down by (e.g., 3 for 300, 297, 294...)',
-    'Input Timeout (sec)': 'Time allowed to type your response'
-}
-
-dlg = gui.DlgFromDict(expInfo, title="Trigram Task testing Memory Recall")
-if not dlg.OK:
-    core.quit()
 
 # --- Assign Parameters ---
 participant_id     = expInfo['Participant ID'].strip() or "unknown"

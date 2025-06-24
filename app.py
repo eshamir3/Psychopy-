@@ -66,7 +66,7 @@ def run_experiment(experiment_name):
 
     
 
-    for pname, desc, default in content.get('parameters', []):
+    for pname, desc, default, option in content.get('parameters', []):
         raw = pname.lower().replace(' ', '_')
         field = re.sub(r'[^a-z0-9_]', '', raw)
         val = request.args.get(field)

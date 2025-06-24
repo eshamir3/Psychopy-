@@ -43,12 +43,24 @@
             <th>Parameter</th>
             <th>Description</th>
             <th>Default Value</th>
+            <th>Options</th>
           </tr>
-          {% for name, desc, default in content.parameters %}
+          {% for name, desc, default, options in content.parameters %}
           <tr>
             <td>{{ name }}</td>
             <td>{{ desc }}</td>
             <td>{{ default }}</td>
+            <td>
+              {% if options %}
+                {% if options is string %}
+                  {{ options }}
+                {% else %}
+                  {{ options | join(', ') }}
+                {% endif %}
+              {% else %}
+                &mdash;
+              {% endif %}
+            </td>
           </tr>
           {% endfor %}
         </table>

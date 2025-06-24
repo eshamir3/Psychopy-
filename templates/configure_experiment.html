@@ -97,7 +97,7 @@
           method="GET"
           action="{{ url_for('run_experiment', experiment_name=experiment.name) }}">
 
-      {% for name, desc, default in content.parameters %}
+     {% for name, desc, default, options in content.parameters %}
       <div class="form-group">
         <label for="{{ name|lower|replace(' ', '_') }}">
           {{ name }} (<em>{{ desc }}</em>)
@@ -109,7 +109,16 @@
           value="{{ default }}"
           data-default="{{ default }}"
         >
-        <small>Default: <strong>{{ default }}</strong></small>
+        <small>
+          Default: <strong>{{ default }}</strong>
+          {% if options %}
+            {% if options is string %}
+              &nbsp;|&nbsp; Options: <strong>{{ options }}</strong>
+            {% else %}
+              &nbsp;|&nbsp; Options: <strong>{{ options | join(', ') }}</strong>
+            {% endif %}
+          {% endif %}
+        </small>
       </div>
       {% endfor %}
 
